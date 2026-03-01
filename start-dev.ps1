@@ -4,7 +4,7 @@
 Write-Host "Iniciando servidor local de desarrollo..." -ForegroundColor Cyan
 try {
     # npx live-server levantará el servidor en el puerto 8080 y abrirá el archivo
-    npx -y live-server --open="REDSOCIAL V1.6.HTML"
+    npx -y live-server --open="index.html"
 } catch {
     Write-Host "No se pudo iniciar el servidor. Asegúrate de tener Node.js instalado." -ForegroundColor Red
     Pause

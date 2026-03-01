@@ -39,6 +39,9 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
+    <!-- jsPDF para generación de reportes PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <!-- Configuración de Tailwind -->
     <script>
         tailwind.config = {
@@ -92,6 +95,20 @@
         .reveal-up.active {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Widget Madurez */
+        #widget-panel {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #widget-panel.open {
+            transform: translateX(0);
+        }
+
+        .btn-check-selected {
+            @apply border-brand-magenta bg-brand-magenta/10 text-brand-magenta ring-2 ring-brand-magenta/20;
         }
 
         /* Acordeón Verticales */
@@ -175,10 +192,10 @@
 
                     <!-- Botones Desktop -->
                     <div class="hidden lg:flex flex-shrink-0 gap-3">
-                        <a href="#contacto"
-                            class="bg-brand-dark hover:bg-black text-white font-medium py-2 px-5 rounded-lg transition-colors text-sm">
-                            Evaluación Técnica
-                        </a>
+                        <button onclick="openWidget()"
+                            class="bg-brand-dark hover:bg-brand-purple text-white font-medium py-2 px-5 rounded-lg transition-colors text-sm flex items-center gap-2">
+                            <i class="ph-bold ph-pulse text-base"></i> Diagnóstico
+                        </button>
                     </div>
 
                     <!-- Botón Menú Móvil -->
@@ -340,7 +357,7 @@
                 <!-- Grilla del Equipo -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-14 mb-16 max-w-5xl mx-auto">
                     <div class="flex flex-col items-center text-center cursor-pointer group"
-                        onclick="openProfile('Laura Melgarejo', 'Coordinadora', 'Ing. en Telecomunicaciones', 'Experta en telecomunicaciones y planificación de infraestructura. Dirige las estrategias de implementación técnica en territorios complejos, asegurando conectividad y eficiencia.', 'https://ui-avatars.com/api/?name=Laura+Melgarejo&background=E6217E&color=fff&size=200')">
+                        onclick="openProfile('Laura Melgarejo', 'Ing. en Telecomunicaciones', 'Ing. en Telecomunicaciones', 'Experta en telecomunicaciones y planificación de infraestructura. Dirige las estrategias de implementación técnica en territorios complejos, asegurando conectividad y eficiencia.', 'https://ui-avatars.com/api/?name=Laura+Melgarejo&background=E6217E&color=fff&size=200')">
                         <img loading="lazy"
                             src="https://ui-avatars.com/api/?name=Laura+Melgarejo&background=E6217E&color=fff&size=150"
                             alt="Laura Melgarejo"
@@ -348,12 +365,12 @@
                         <h4
                             class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-magenta transition-colors">
                             Laura Melgarejo</h4>
-                        <p class="text-[10px] sm:text-xs text-brand-orange mt-1 font-semibold uppercase tracking-wider">
-                            Coordinadora</p>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-1 uppercase tracking-wider">
+                            Ing. en Telecomunicaciones</p>
                     </div>
 
                     <div class="flex flex-col items-center text-center cursor-pointer group"
-                        onclick="openProfile('Lihuen Bezzo', 'Coordinadora', 'Diseñadora Industrial', 'Especialista en Design Thinking y diseño centrado en el usuario. Coordina el rediseño de procesos y flujos de atención ciudadana para maximizar la usabilidad.', 'https://ui-avatars.com/api/?name=Lihuen+Bezzo&background=8A2B88&color=fff&size=200')">
+                        onclick="openProfile('Lihuen Bezzo', 'Diseñadora Industrial', 'Diseñadora Industrial', 'Especialista en Design Thinking y diseño centrado en el usuario. Coordina el rediseño de procesos y flujos de atención ciudadana para maximizar la usabilidad.', 'https://ui-avatars.com/api/?name=Lihuen+Bezzo&background=8A2B88&color=fff&size=200')">
                         <img loading="lazy"
                             src="https://ui-avatars.com/api/?name=Lihuen+Bezzo&background=8A2B88&color=fff&size=150"
                             alt="Lihuen Bezzo"
@@ -361,8 +378,8 @@
                         <h4
                             class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-purple transition-colors">
                             Lihuen Bezzo</h4>
-                        <p class="text-[10px] sm:text-xs text-brand-orange mt-1 font-semibold uppercase tracking-wider">
-                            Coordinadora</p>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-1 uppercase tracking-wider">
+                            Diseñadora Industrial</p>
                     </div>
 
                     <div class="flex flex-col items-center text-center cursor-pointer group"
@@ -741,35 +758,43 @@
                 <div
                     class="flex items-center gap-12 w-max animate-infinite-scroll hover:[animation-play-state:paused] px-8">
                     <!-- Set 1 -->
-                    <img loading="lazy" src="CFI.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="CFI.jpg" alt="CFI" class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="Santa FE.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="Santa FE.jpg" alt="Santa Fe"
+                        class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="entre rios.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="entre rios.jpg" alt="Entre Ríos"
+                        class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="chubut.png" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="chubut.png" alt="Chubut"
+                        class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="GCBA.png" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="GCBA.png" alt="GCBA" class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="descarga.png" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="descarga.png" alt="Buenos Aires"
+                        class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="SAAS.png" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="SAAS.png" alt="SAAS" class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
 
                     <!-- Duplicate for infinite effect -->
-                    <img loading="lazy" src="CFI.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="CFI.jpg" alt="CFI" class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="Santa FE.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="Santa FE.jpg" alt="Santa Fe"
+                        class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="entre rios.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="entre rios.jpg" alt="Entre Ríos"
+                        class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="chubut.png" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="chubut.png" alt="Chubut"
+                        class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="GCBA.png" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="GCBA.png" alt="GCBA" class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="descarga.png" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="descarga.png" alt="Buenos Aires"
+                        class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="SAAS.png" alt="" class="w-32 h-16 object-contain transition-all"
+                    <img loading="lazy" src="SAAS.png" alt="SAAS" class="w-[8cm] h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                 </div>
             </div>
@@ -831,177 +856,283 @@
             </div>
         </section>
 
-        <!-- 8. CASOS DE ÉXITO (Diseño Pixel Perfect) -->
+        <!-- 8. CASOS DE ÉXITO (Diseño Timeline) -->
         <section id="casos" class="py-24 bg-gray-50 border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="mb-16 reveal-up">
+                <div class="text-center mb-16 reveal-up">
                     <span
                         class="bg-brand-purple/10 text-brand-purple px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] mb-4 inline-block border border-brand-purple/20">Impacto
                         Real</span>
-                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-brand-dark mb-4">Evidencia Institucional
+                    <h2 class="font-heading text-3xl sm:text-5xl font-bold text-brand-dark mb-4">Evidencia Institucional
                     </h2>
-                    <p class="text-gray-600 max-w-2xl text-sm md:text-base leading-relaxed">
-                        Nuestra trayectoria se construye sobre soluciones implementadas que han transformado la realidad
-                        operativa de gobiernos y organizaciones civiles.
+                    <p class="text-gray-600 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+                        Intervenciones reales con resultados medibles que transformaron la operación de gobiernos y
+                        organizaciones.
                     </p>
+                    <div class="w-16 h-1 bg-brand-magenta mx-auto mt-6"></div>
                 </div>
 
                 <!-- Grilla 3 Casos -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                    <!-- Caso 1 -->
+                    <!-- Caso 1: Entre Ríos -->
                     <div
-                        class="reveal-up bg-white border border-gray-100 rounded-xl p-8 hover:shadow-xl transition-shadow flex flex-col h-full shadow-sm">
-                        <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-                            <span
-                                class="bg-[#F5E6F5] text-brand-purple px-3 py-1 rounded text-xs font-bold uppercase tracking-wider">Provincia
-                                de Entre Ríos</span>
-                            <span
-                                class="text-[10px] bg-[#E6F4EA] text-green-700 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Implementado</span>
+                        class="reveal-up bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all shadow-sm group">
+                        <!-- Header con Gradiente -->
+                        <div class="bg-gradient-to-r from-brand-purple to-brand-magenta p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <span
+                                    class="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider">Provincia
+                                    de Entre Ríos</span>
+                                <span
+                                    class="flex items-center gap-1.5 text-[9px] font-bold text-white/90 uppercase tracking-wider"><span
+                                        class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>Implementado</span>
+                            </div>
+                            <h3 class="font-heading text-xl font-bold text-white leading-tight">Modernización Integral
+                                de Trámites y Procesos</h3>
                         </div>
-                        <h3 class="font-heading text-2xl font-bold text-brand-dark mb-6 leading-tight">Modernización
-                            Integral de Trámites y Procesos</h3>
 
-                        <div class="space-y-5 mb-6 flex-grow">
-                            <div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">El
-                                    Problema</p>
-                                <p class="text-sm text-gray-600 leading-relaxed">Altos tiempos de resolución (TMA > 45
-                                    días), baja trazabilidad documental y atención fragmentada en silos.</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-bold text-brand-purple uppercase tracking-widest mb-1">La
-                                    Intervención</p>
-                                <p class="text-sm text-gray-600 leading-relaxed">Diseño conceptual de la arquitectura de
-                                    flujos y acompañamiento en la implementación de BPM para +800 agentes.</p>
-                            </div>
-                            <div class="bg-gray-50 p-6 rounded-lg border border-gray-100 mt-2">
-                                <p class="text-[10px] font-bold text-brand-magenta uppercase tracking-widest mb-3">
-                                    Resultado Cuantificado</p>
-                                <div class="flex gap-8">
-                                    <div>
-                                        <p class="text-3xl font-heading font-bold text-brand-dark mb-1">-42%</p>
-                                        <p class="text-[10px] text-gray-500 uppercase tracking-wider">Tiempos de espera
-                                        </p>
+                        <!-- Timeline de Intervención -->
+                        <div class="p-6 space-y-0">
+                            <!-- Paso 1: Problema -->
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-red-50 border-2 border-red-300 flex items-center justify-center shrink-0">
+                                        <i class="ph-bold ph-warning text-red-500 text-sm"></i>
                                     </div>
-                                    <div>
-                                        <p class="text-3xl font-heading font-bold text-brand-dark mb-1">100%</p>
-                                        <p class="text-[10px] text-gray-500 uppercase tracking-wider">Trámites trazables
-                                        </p>
+                                    <div class="w-0.5 h-full bg-gray-200 my-1"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="text-[10px] font-bold text-red-400 uppercase tracking-widest mb-1">
+                                        Problema Detectado</p>
+                                    <p class="text-sm text-gray-600 leading-relaxed">Tiempos de resolución superiores a
+                                        45 días (TMA), baja trazabilidad documental y atención fragmentada en silos.</p>
+                                </div>
+                            </div>
+                            <!-- Paso 2: Intervención -->
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-brand-purple/10 border-2 border-brand-purple flex items-center justify-center shrink-0">
+                                        <i class="ph-bold ph-wrench text-brand-purple text-sm"></i>
+                                    </div>
+                                    <div class="w-0.5 h-full bg-gray-200 my-1"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="text-[10px] font-bold text-brand-purple uppercase tracking-widest mb-1">
+                                        Intervención</p>
+                                    <p class="text-sm text-gray-600 leading-relaxed">Diseño de arquitectura de flujos y
+                                        acompañamiento en implementación de BPM para +800 agentes.</p>
+                                </div>
+                            </div>
+                            <!-- Paso 3: Resultado -->
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-green-50 border-2 border-green-500 flex items-center justify-center shrink-0">
+                                        <i class="ph-bold ph-chart-line-up text-green-600 text-sm"></i>
+                                    </div>
+                                </div>
+                                <div class="pb-2">
+                                    <p class="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-2">
+                                        Resultado</p>
+                                    <div class="flex gap-6">
+                                        <div class="text-center">
+                                            <p class="text-2xl font-heading font-bold text-brand-dark">-42%</p>
+                                            <p class="text-[9px] text-gray-500 uppercase tracking-wider">Tiempos</p>
+                                        </div>
+                                        <div class="w-px bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-2xl font-heading font-bold text-brand-dark">100%</p>
+                                            <p class="text-[9px] text-gray-500 uppercase tracking-wider">Trazables</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="border-t border-gray-100 pt-6 mt-auto">
-                            <p class="text-[10px] font-bold text-brand-dark uppercase tracking-widest mb-4">Activos
-                                Transferidos</p>
-                            <ul class="text-sm text-gray-600 space-y-3">
-                                <li class="flex items-start gap-3"><i
-                                        class="ph-bold ph-check-circle text-green-500 mt-0.5 text-base"></i>
-                                    <div><strong>Entregables:</strong> Tablero directivo BI, Manual de procesos,
-                                        Protocolo.</div>
-                                </li>
-                                <li class="flex items-start gap-3"><i
-                                        class="ph-bold ph-check-circle text-green-500 mt-0.5 text-base"></i>
-                                    <div><strong>Alcance:</strong> 12 Ministerios, 35 Nodos territoriales,
-                                        Omnicanalidad.</div>
-                                </li>
-                            </ul>
+                        <!-- Activos Transferidos (Collapsible) -->
+                        <div class="border-t border-gray-100">
+                            <button
+                                onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.icon-toggle').classList.toggle('rotate-180')"
+                                class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors">
+                                <span
+                                    class="text-[10px] font-bold text-brand-dark uppercase tracking-widest flex items-center gap-2"><i
+                                        class="ph-bold ph-package text-brand-purple"></i>Activos Transferidos</span>
+                                <i
+                                    class="ph-bold ph-caret-down text-gray-400 text-xs icon-toggle transition-transform"></i>
+                            </button>
+                            <div class="hidden px-6 pb-5">
+                                <div class="flex flex-wrap gap-2">
+                                    <span
+                                        class="bg-brand-purple/5 text-brand-purple text-[10px] font-bold px-3 py-1.5 rounded-full border border-brand-purple/10">Tablero
+                                        BI</span>
+                                    <span
+                                        class="bg-brand-purple/5 text-brand-purple text-[10px] font-bold px-3 py-1.5 rounded-full border border-brand-purple/10">Manual
+                                        BPM</span>
+                                    <span
+                                        class="bg-brand-purple/5 text-brand-purple text-[10px] font-bold px-3 py-1.5 rounded-full border border-brand-purple/10">Protocolo</span>
+                                </div>
+                                <p class="text-[10px] text-gray-500 mt-3"><strong
+                                        class="text-gray-700">Alcance:</strong> 12 Ministerios · 35 Nodos ·
+                                    Omnicanalidad</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Caso 2 -->
+                    <!-- Caso 2: Santa Fe -->
                     <div
-                        class="reveal-up bg-white border border-gray-100 rounded-xl p-8 hover:shadow-xl transition-shadow flex flex-col h-full shadow-sm">
-                        <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-                            <span
-                                class="bg-[#FCE6F0] text-brand-magenta px-3 py-1 rounded text-xs font-bold uppercase tracking-wider">Provincia
-                                de Santa Fe</span>
-                            <span
-                                class="text-[10px] bg-[#FFF8CC] text-[#A67C00] px-3 py-1 rounded-full font-bold uppercase tracking-wider">En
-                                Despliegue</span>
+                        class="reveal-up bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all shadow-sm group">
+                        <!-- Header con Gradiente -->
+                        <div class="bg-gradient-to-r from-brand-magenta to-brand-orange p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <span
+                                    class="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider">Provincia
+                                    de Santa Fe</span>
+                                <span
+                                    class="flex items-center gap-1.5 text-[9px] font-bold text-white/90 uppercase tracking-wider"><span
+                                        class="w-2 h-2 rounded-full bg-brand-yellow animate-pulse"></span>En
+                                    Despliegue</span>
+                            </div>
+                            <h3 class="font-heading text-xl font-bold text-white leading-tight">Rediseño de la
+                                Experiencia Ciudadana y CX</h3>
                         </div>
-                        <h3 class="font-heading text-2xl font-bold text-brand-dark mb-6 leading-tight">Rediseño de la
-                            Experiencia Ciudadana y CX</h3>
 
-                        <div class="space-y-5 mb-6 flex-grow">
-                            <div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">El
-                                    Problema</p>
-                                <p class="text-sm text-gray-600 leading-relaxed">Insatisfacción crítica por fricción en
-                                    puntos de contacto y falta de gobierno de datos unificados para directivos.</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-bold text-brand-purple uppercase tracking-widest mb-1">La
-                                    Intervención</p>
-                                <p class="text-sm text-gray-600 leading-relaxed">Mapeo de *Journey* ciudadano y diseño
-                                    de tableros de control analítico sobre ecosistemas existentes.</p>
-                            </div>
-                            <div class="bg-gray-50 p-6 rounded-lg border border-gray-100 mt-2">
-                                <p class="text-[10px] font-bold text-brand-magenta uppercase tracking-widest mb-3">
-                                    Resultado Cuantificado</p>
-                                <div class="flex gap-8">
-                                    <div>
-                                        <p class="text-3xl font-heading font-bold text-brand-dark mb-1">+28 pts</p>
-                                        <p class="text-[10px] text-gray-500 uppercase tracking-wider">Crecimiento CSAT
-                                        </p>
+                        <!-- Timeline de Intervención -->
+                        <div class="p-6 space-y-0">
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-red-50 border-2 border-red-300 flex items-center justify-center shrink-0">
+                                        <i class="ph-bold ph-warning text-red-500 text-sm"></i>
                                     </div>
-                                    <div>
-                                        <p class="text-3xl font-heading font-bold text-brand-dark mb-1">5</p>
-                                        <p class="text-[10px] text-gray-500 uppercase tracking-wider">Nodos
-                                            estandarizados</p>
+                                    <div class="w-0.5 h-full bg-gray-200 my-1"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="text-[10px] font-bold text-red-400 uppercase tracking-widest mb-1">
+                                        Problema Detectado</p>
+                                    <p class="text-sm text-gray-600 leading-relaxed">Insatisfacción crítica por fricción
+                                        en puntos de contacto y falta de gobierno de datos unificados para directivos.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-brand-magenta/10 border-2 border-brand-magenta flex items-center justify-center shrink-0">
+                                        <i class="ph-bold ph-wrench text-brand-magenta text-sm"></i>
+                                    </div>
+                                    <div class="w-0.5 h-full bg-gray-200 my-1"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="text-[10px] font-bold text-brand-magenta uppercase tracking-widest mb-1">
+                                        Intervención</p>
+                                    <p class="text-sm text-gray-600 leading-relaxed">Mapeo de Journey ciudadano y diseño
+                                        de tableros de control analítico sobre ecosistemas existentes.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-green-50 border-2 border-green-500 flex items-center justify-center shrink-0">
+                                        <i class="ph-bold ph-chart-line-up text-green-600 text-sm"></i>
+                                    </div>
+                                </div>
+                                <div class="pb-2">
+                                    <p class="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-2">
+                                        Resultado</p>
+                                    <div class="flex gap-6">
+                                        <div class="text-center">
+                                            <p class="text-2xl font-heading font-bold text-brand-dark">+28pts</p>
+                                            <p class="text-[9px] text-gray-500 uppercase tracking-wider">CSAT</p>
+                                        </div>
+                                        <div class="w-px bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-2xl font-heading font-bold text-brand-dark">5</p>
+                                            <p class="text-[9px] text-gray-500 uppercase tracking-wider">Nodos Std.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="border-t border-gray-100 pt-6 mt-auto">
-                            <p class="text-[10px] font-bold text-brand-dark uppercase tracking-widest mb-4">Activos
-                                Transferidos</p>
-                            <ul class="text-sm text-gray-600 space-y-3">
-                                <li class="flex items-start gap-3"><i
-                                        class="ph-bold ph-check-circle text-green-500 mt-0.5 text-base"></i>
-                                    <div><strong>Entregables:</strong> Matriz de ruteo, Modelo de datos, Glosario de
-                                        KPIs.</div>
-                                </li>
-                                <li class="flex items-start gap-3"><i
-                                        class="ph-bold ph-check-circle text-green-500 mt-0.5 text-base"></i>
-                                    <div><strong>Alcance:</strong> Red de Centros de Participación y Portal Web.</div>
-                                </li>
-                            </ul>
+                        <div class="border-t border-gray-100">
+                            <button
+                                onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.icon-toggle').classList.toggle('rotate-180')"
+                                class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors">
+                                <span
+                                    class="text-[10px] font-bold text-brand-dark uppercase tracking-widest flex items-center gap-2"><i
+                                        class="ph-bold ph-package text-brand-magenta"></i>Activos Transferidos</span>
+                                <i
+                                    class="ph-bold ph-caret-down text-gray-400 text-xs icon-toggle transition-transform"></i>
+                            </button>
+                            <div class="hidden px-6 pb-5">
+                                <div class="flex flex-wrap gap-2">
+                                    <span
+                                        class="bg-brand-magenta/5 text-brand-magenta text-[10px] font-bold px-3 py-1.5 rounded-full border border-brand-magenta/10">Matriz
+                                        de Ruteo</span>
+                                    <span
+                                        class="bg-brand-magenta/5 text-brand-magenta text-[10px] font-bold px-3 py-1.5 rounded-full border border-brand-magenta/10">Modelo
+                                        de Datos</span>
+                                    <span
+                                        class="bg-brand-magenta/5 text-brand-magenta text-[10px] font-bold px-3 py-1.5 rounded-full border border-brand-magenta/10">Glosario
+                                        KPIs</span>
+                                </div>
+                                <p class="text-[10px] text-gray-500 mt-3"><strong
+                                        class="text-gray-700">Alcance:</strong> Red de Centros de Participación · Portal
+                                    Web</p>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Caso 3: Entre Ríos con Vos -->
                     <div
-                        class="reveal-up bg-white border border-gray-100 rounded-xl p-8 hover:shadow-xl transition-shadow flex flex-col h-full shadow-sm">
-                        <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-                            <span
-                                class="bg-[#EBF5FF] text-blue-600 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider">Programa
-                                Estratégico</span>
-                            <span
-                                class="text-[10px] bg-[#E6F4EA] text-green-700 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Activo</span>
+                        class="reveal-up bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all shadow-sm group">
+                        <!-- Header con Gradiente -->
+                        <div class="bg-gradient-to-r from-brand-orange to-brand-yellow p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <span
+                                    class="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider">Programa
+                                    Estratégico</span>
+                                <span
+                                    class="flex items-center gap-1.5 text-[9px] font-bold text-white/90 uppercase tracking-wider"><span
+                                        class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>Activo</span>
+                            </div>
+                            <h3 class="font-heading text-xl font-bold text-white leading-tight">Entre Ríos con Vos</h3>
                         </div>
-                        <h3 class="font-heading text-2xl font-bold text-brand-dark mb-6 leading-tight">Entre Ríos con
-                            Vos</h3>
-                        <div class="space-y-5 mb-6 flex-grow">
-                            <p class="text-sm text-gray-600 leading-relaxed">Dispositivo territorial itinerante diseñado
-                                para acercar los servicios del Estado directamente a los barrios, integrando áreas de
-                                salud, identidad y asesoramiento legal en un solo flujo operativo.</p>
-                            <div class="bg-gray-50 p-6 rounded-lg border border-gray-100">
-                                <p class="text-[10px] font-bold text-brand-purple uppercase tracking-widest mb-3">
-                                    Impacto Social</p>
-                                <p class="text-2xl font-heading font-bold text-brand-dark mb-1">+50 Nodos</p>
-                                <p class="text-[10px] text-gray-500 uppercase tracking-wider">Puntos de atención activos
-                                </p>
+
+                        <!-- Contenido Especial -->
+                        <div class="p-6">
+                            <p class="text-sm text-gray-600 leading-relaxed mb-6">Dispositivo territorial itinerante
+                                para acercar servicios del Estado a los barrios: salud, identidad y asesoramiento legal
+                                en un solo flujo operativo.</p>
+
+                            <!-- Resultado Visual -->
+                            <div
+                                class="bg-gradient-to-br from-brand-orange/5 to-brand-yellow/10 p-6 rounded-xl border border-brand-orange/10">
+                                <div class="flex items-center gap-6">
+                                    <div class="text-center">
+                                        <p class="text-3xl font-heading font-bold text-brand-dark">+50</p>
+                                        <p class="text-[9px] text-gray-500 uppercase tracking-wider font-bold">Nodos
+                                            Activos</p>
+                                    </div>
+                                    <div class="w-px h-12 bg-brand-orange/20"></div>
+                                    <div>
+                                        <p class="text-[10px] text-gray-500 leading-relaxed">Puntos de atención
+                                            territorial desplegados en la provincia, con cobertura de servicios
+                                            integrados.</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="border-t border-gray-100 pt-6 mt-auto">
-                            <p class="text-[10px] font-bold text-brand-dark uppercase tracking-widest mb-2">Valor
-                                Agregado</p>
-                            <p class="text-xs text-gray-500 italic">"Transformamos la cercanía en un método de gestión
-                                medible y eficiente."</p>
+
+                        <div class="border-t border-gray-100 px-6 py-4">
+                            <div class="flex items-start gap-3">
+                                <i class="ph-fill ph-quotes text-2xl text-brand-orange/30"></i>
+                                <p class="text-xs text-gray-500 italic leading-relaxed">"Transformamos la cercanía en un
+                                    método de gestión medible y eficiente."</p>
+                            </div>
                         </div>
                     </div>
 
@@ -1417,41 +1548,57 @@
             </div>
         </section>
 
-        <!-- 11. CONTACTO (Evaluación Técnica) -->
-        <section id="contacto" class="py-24 bg-brand-light">
-            <div class="max-w-3xl mx-auto px-4">
+        <!-- 11. CONTACTO (Evaluación Técnica) — OCULTO POR DEFECTO, se abre post-diagnóstico -->
+        <section id="contacto" class="bg-brand-light overflow-hidden transition-all duration-700"
+            style="max-height: 0; padding: 0; opacity: 0;">
+            <div class="max-w-3xl mx-auto px-4 py-24">
                 <div class="text-center mb-10">
+                    <div
+                        class="inline-flex items-center gap-2 bg-brand-magenta/10 text-brand-magenta px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] mb-4 border border-brand-magenta/20">
+                        <i class="ph-bold ph-seal-check text-sm"></i>Diagnóstico completado — Siguiente paso
+                    </div>
                     <h2 class="font-heading text-3xl font-bold text-brand-dark mb-2">Solicitud de Evaluación Técnica
                     </h2>
-                    <p class="text-gray-600 text-sm">Iniciemos un diagnóstico preliminar sobre la arquitectura de
-                        integración de su organismo.</p>
+                    <p class="text-gray-600 text-sm">Completá tus datos y nuestro Comité Técnico evaluará tu caso con el
+                        diagnóstico de madurez adjunto.</p>
                 </div>
 
-                <form onsubmit="handleTechnicalSubmit(event)"
-                    class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                <form id="tech-evaluation-form" onsubmit="handleTechnicalSubmit(event)"
+                    class="bg-white p-8 rounded-2xl border border-gray-200 shadow-xl shadow-brand-purple/5 relative overflow-hidden">
+                    <div
+                        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-purple via-brand-magenta to-brand-orange">
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                        <input type="text"
-                            class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm"
+                        <input type="text" id="tech-name" name="name"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-purple/20 focus:border-brand-purple outline-none text-sm transition-all"
                             placeholder="Nombre completo" required>
-                        <input type="email"
-                            class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm"
+                        <input type="email" id="tech-email" name="email"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-purple/20 focus:border-brand-purple outline-none text-sm transition-all"
                             placeholder="Email institucional" required>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                        <input type="text"
-                            class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm"
+                        <input type="text" id="tech-organismo" name="organismo"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-purple/20 focus:border-brand-purple outline-none text-sm transition-all"
                             placeholder="Organismo o Entidad" required>
-                        <input type="text"
-                            class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm"
+                        <input type="text" id="tech-rol" name="rol"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-purple/20 focus:border-brand-purple outline-none text-sm transition-all"
                             placeholder="Rol / Área de gestión" required>
                     </div>
-                    <input type="text"
-                        class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm mb-6"
+                    <input type="text" id="tech-desafio" name="desafio"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-purple/20 focus:border-brand-purple outline-none text-sm mb-4 transition-all"
                         placeholder="Desafío prioritario de integración (1 frase)" required>
 
+                    <div id="tech-summary-container" class="hidden mb-6">
+                        <label
+                            class="block text-[10px] uppercase tracking-widest text-brand-purple font-bold mb-2">Resumen
+                            de Diagnóstico Auto-generado</label>
+                        <textarea id="tech-summary" name="diagnostico_resumen" readonly
+                            class="w-full px-4 py-3 rounded-lg border border-brand-purple/20 bg-brand-purple/5 text-xs text-gray-700 outline-none resize-none h-24"></textarea>
+                    </div>
+
                     <button type="submit"
-                        class="w-full bg-brand-dark text-white font-bold py-3.5 rounded hover:bg-black transition-colors text-sm uppercase tracking-wider">
-                        Enviar Solicitud al Comité
+                        class="w-full bg-brand-dark text-white font-bold py-3.5 rounded-lg hover:bg-brand-purple transition-colors text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                        Enviar Solicitud al Comité <i class="ph-bold ph-paper-plane-right"></i>
                     </button>
                 </form>
             </div>
@@ -2224,6 +2371,734 @@
                 btn.innerHTML = originalText;
                 btn.classList.remove('opacity-75', 'cursor-not-allowed');
             }
+        }
+    </script>
+
+    <!-- 12. WIDGET DE DIAGNÓSTICO (Trigger & Drawer) -->
+    <!-- Botón Flotante -->
+    <button onclick="openWidget()" id="widget-trigger"
+        class="fixed right-0 top-1/2 -translate-y-1/2 z-[40] bg-brand-magenta text-white py-4 px-2 rounded-l-2xl shadow-2xl hover:bg-brand-purple transition-all flex flex-col items-center gap-3 group border-l-2 border-white/20">
+        <span class="[writing-mode:vertical-lr] rotate-180 uppercase text-[10px] font-bold tracking-widest">Diagnóstico
+            Digital</span>
+        <i class="ph-bold ph-chart-bar-horizontal text-xl group-hover:scale-110 transition-transform"></i>
+    </button>
+
+    <!-- Overlay / Backdrop -->
+    <div id="widget-backdrop" onclick="closeWidget()"
+        class="fixed inset-0 bg-brand-dark/20 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300">
+    </div>
+
+    <!-- Panel Lateral -->
+    <div id="widget-panel"
+        class="fixed right-0 top-0 h-full w-full max-w-md bg-brand-dark/95 backdrop-blur-xl z-[70] shadow-[-20px_0_50px_rgba(0,0,0,0.5)] flex flex-col border-l border-white/10 text-white overflow-hidden">
+
+        <!-- Header -->
+        <div class="p-6 border-b border-white/10 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-magenta rounded-lg flex items-center justify-center">
+                    <i class="ph-bold ph-gauge text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-heading font-bold text-sm uppercase tracking-wider">Check de Madurez</h3>
+                    <p class="text-[10px] text-gray-400 font-medium">Arquitectura Pública Integrada</p>
+                </div>
+            </div>
+            <button onclick="closeWidget()" class="text-gray-400 hover:text-white transition-colors">
+                <i class="ph-bold ph-x text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Cuerpo del Widget (Scrollable) -->
+        <div id="widget-content" class="flex-grow overflow-y-auto p-6 no-scrollbar">
+
+            <!-- Pantalla 1: Captura de Datos -->
+            <div id="step-intro" class="space-y-6">
+                <div class="bg-brand-magenta/10 border border-brand-magenta/20 p-5 rounded-2xl">
+                    <p class="text-xs leading-relaxed text-gray-300">
+                        Evaluá el nivel operativo de tu organismo en tiempo real. Obtené un puntaje detallado y las
+                        dimensiones críticas a mejorar.
+                    </p>
+                </div>
+                <form onsubmit="startCheck(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-2">Nombre
+                            del Organismo</label>
+                        <input require id="w-organismo" type="text" placeholder="Ej: Municipio de..."
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-brand-magenta outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-2">Email
+                            Institucional (Opcional)</label>
+                        <input id="w-email" type="email" placeholder="para recibir el reporte"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-brand-magenta outline-none transition-all">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-brand-magenta text-white font-bold py-4 rounded-xl hover:bg-magenta-600 transition-all flex items-center justify-center gap-2 uppercase text-xs tracking-widest mt-6">
+                        Comenzar Evaluación <i class="ph-bold ph-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Pantalla 2: Preguntas (Dinámicas) -->
+            <div id="step-questions" class="hidden space-y-8">
+                <!-- Barra de Progreso -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-end">
+                        <span id="question-category"
+                            class="text-[10px] font-bold text-brand-magenta uppercase tracking-[0.2em]">Dimensión
+                            1</span>
+                        <span id="question-progress-text" class="text-[10px] text-gray-500 font-bold">1 / 17</span>
+                    </div>
+                    <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div id="question-progress-bar"
+                            class="h-full bg-brand-magenta w-[5%] transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Pregunta Actual -->
+                <div id="question-container" class="space-y-6 slide-in">
+                    <h4 id="question-text" class="font-heading font-bold text-lg leading-tight">¿El organismo tiene al
+                        menos un canal digital de atención activo?</h4>
+
+                    <div class="grid grid-cols-1 gap-3">
+                        <button onclick="answerQuestion(2)"
+                            class="w-full bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 transition-all flex items-center justify-between group">
+                            <span class="text-sm font-medium">Sí, totalmente</span>
+                            <div
+                                class="w-5 h-5 rounded-full border border-white/20 group-hover:border-brand-magenta flex items-center justify-center transition-all">
+                                <div
+                                    class="w-2 h-2 rounded-full bg-brand-magenta opacity-0 group-hover:opacity-100 transition-opacity">
+                                </div>
+                            </div>
+                        </button>
+                        <button onclick="answerQuestion(1)"
+                            class="w-full bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 transition-all flex items-center justify-between group">
+                            <span class="text-sm font-medium">Parcialmente</span>
+                            <div
+                                class="w-5 h-5 rounded-full border border-white/20 group-hover:border-brand-orange flex items-center justify-center transition-all">
+                                <div
+                                    class="w-2 h-2 rounded-full bg-brand-orange opacity-0 group-hover:opacity-100 transition-opacity">
+                                </div>
+                            </div>
+                        </button>
+                        <button onclick="answerQuestion(0)"
+                            class="w-full bg-white/5 border border-white/10 p-4 rounded-xl hover:bg-white/10 transition-all flex items-center justify-between group">
+                            <span class="text-sm font-medium">No, aún no</span>
+                            <div
+                                class="w-5 h-5 rounded-full border border-white/20 group-hover:border-gray-500 flex items-center justify-center transition-all">
+                                <div
+                                    class="w-2 h-2 rounded-full bg-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pantalla 3: Resultados con Dashboard Donut -->
+            <div id="step-results" class="hidden space-y-6 pb-10">
+                <div class="text-center space-y-3">
+                    <div class="inline-block p-3 bg-brand-magenta/10 rounded-full mb-1">
+                        <i class="ph-bold ph-trend-up text-3xl text-brand-magenta"></i>
+                    </div>
+                    <h4 class="font-heading font-bold text-lg uppercase tracking-widest">Dashboard de Madurez</h4>
+                    <p id="res-organismo" class="text-sm text-gray-400 font-medium">Nombre del Organismo</p>
+                </div>
+
+                <!-- Score Central Grande -->
+                <div class="relative flex items-center justify-center py-4">
+                    <svg class="w-28 h-28 transform -rotate-90">
+                        <circle cx="56" cy="56" r="50" stroke="currentColor" stroke-width="6" fill="transparent"
+                            class="text-white/5" />
+                        <circle id="res-circle" cx="56" cy="56" r="50" stroke="url(#scoreGradient)" stroke-width="6"
+                            fill="transparent" stroke-dasharray="314.16" stroke-dashoffset="314.16"
+                            stroke-linecap="round" class="transition-all duration-1000" />
+                        <defs>
+                            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#8A2B88" />
+                                <stop offset="50%" stop-color="#E6217E" />
+                                <stop offset="100%" stop-color="#F99D1C" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="res-score" class="text-3xl font-bold">0</span>
+                        <span class="text-[8px] text-gray-500 uppercase tracking-widest">de 34 pts</span>
+                    </div>
+                </div>
+
+                <!-- Nivel -->
+                <div class="bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
+                    <p id="res-level-tag"
+                        class="text-[10px] font-bold text-brand-magenta uppercase tracking-[0.2em] mb-1">Nivel: Inicial
+                    </p>
+                    <h5 id="res-level-name" class="font-heading font-bold text-lg text-white mb-2">Manual y Fragmentado
+                    </h5>
+                    <p id="res-level-desc" class="text-[11px] text-gray-400 leading-relaxed italic">"La gestión carece
+                        de trazabilidad digital."</p>
+                </div>
+
+                <!-- Dashboard de Donuts por Dimensión -->
+                <div class="space-y-3">
+                    <h6 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Puntaje por Dimensión</h6>
+                    <div id="res-donuts" class="grid grid-cols-3 gap-3">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Focos de Intervención -->
+                <div class="space-y-3">
+                    <h6 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Focos de Intervención
+                        Prioritarios</h6>
+                    <div id="res-weaknesses" class="grid grid-cols-1 gap-2">
+                    </div>
+                </div>
+
+                <!-- CTAs -->
+                <div class="space-y-3 pt-2">
+                    <button onclick="downloadResults()"
+                        class="w-full bg-gradient-to-r from-brand-purple via-brand-magenta to-brand-orange text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2 uppercase text-[10px] tracking-[0.15em] shadow-lg">
+                        <i class="ph-bold ph-file-pdf text-base"></i> Descargar Reporte PDF
+                    </button>
+                    <button onclick="closeWidget(); openPortalLogin();"
+                        class="w-full bg-white text-brand-dark font-bold py-3.5 rounded-xl hover:bg-brand-purple hover:text-white transition-all flex items-center justify-center gap-2 uppercase text-[10px] tracking-[0.15em]">
+                        <i class="ph-bold ph-lock-key text-sm"></i> Acceder al Portal
+                    </button>
+                </div>
+
+                <!-- Micro Donación -->
+                <div
+                    class="mt-4 bg-gradient-to-br from-brand-purple/10 to-brand-magenta/5 border border-white/10 p-5 rounded-2xl text-center">
+                    <i class="ph-fill ph-heart text-brand-magenta text-xl mb-2"></i>
+                    <p class="text-[11px] text-gray-300 leading-relaxed mb-3">¿Te resultó útil este diagnóstico?
+                        Ayudanos a financiar más investigación aplicada.</p>
+                    <div class="flex gap-2">
+                        <a href="https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=TU_PREFERENCIA_1"
+                            target="_blank"
+                            class="flex-1 bg-[#009EE3] text-white font-bold py-2.5 rounded-lg text-[9px] uppercase tracking-widest hover:bg-[#008ACB] transition-colors flex items-center justify-center gap-1">
+                            <i class="ph-bold ph-hand-heart text-sm"></i> Donar
+                        </a>
+                        <button
+                            onclick="closeWidget(); document.getElementById('financiamiento').scrollIntoView({behavior:'smooth'})"
+                            class="flex-1 bg-white/10 text-white font-bold py-2.5 rounded-lg text-[9px] uppercase tracking-widest hover:bg-white/20 transition-colors">
+                            Ver Niveles
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script de Lógica del Widget -->
+    <script>
+        const widgetQuestions = [
+            { category: "Canales y Atención", text: "El organismo tiene al menos un canal digital de atención activo (web, chat, app)." },
+            { category: "Canales y Atención", text: "Los canales están unificados bajo una misma bandeja o sistema de seguimiento." },
+            { category: "Canales y Atención", text: "El ciudadano puede hacer seguimiento de su trámite de forma autónoma." },
+            { category: "Canales y Atención", text: "Existe protocolo de respuesta con tiempos definidos por canal." },
+
+            { category: "Datos y Trazabilidad", text: "Los trámites se registran digitalmente desde el inicio hasta el cierre." },
+            { category: "Datos y Trazabilidad", text: "Existe un tablero o reporte periódico de métricas de gestión." },
+            { category: "Datos y Trazabilidad", text: "Los datos de diferentes áreas pueden cruzarse sin intervención manual." },
+            { category: "Datos y Trazabilidad", text: "Se miden indicadores de satisfacción ciudadana (CSAT, NPS u otro)." },
+
+            { category: "Procesos y Flujos", text: "Los procesos críticos están documentados y son conocidos por el equipo." },
+            { category: "Procesos y Flujos", text: "Existen flujos de aprobación definidos y respetados en la práctica." },
+            { category: "Procesos y Flujos", text: "Los cuellos de botella están identificados y tienen responsable asignado." },
+
+            { category: "Cultura y Capacidades", text: "El equipo utiliza herramientas digitales de colaboración en el día a día." },
+            { category: "Cultura y Capacidades", text: "Existe capacitación formal o informal en competencias digitales." },
+            { category: "Cultura y Capacidades", text: "Los mandos medios tienen acceso a información para tomar decisiones." },
+
+            { category: "Gobierno y Continuidad", text: "Las iniciativas digitales tienen presupuesto asignado formalmente." },
+            { category: "Gobierno y Continuidad", text: "Existe un responsable o área de modernización/transformación digital." },
+            { category: "Gobierno y Continuidad", text: "Los cambios implementados sobreviven la rotación de autoridades." }
+        ];
+
+        let currentQuestion = 0;
+        let answers = [];
+        let organismData = { name: '', email: '' };
+
+        function openWidget() {
+            document.getElementById('widget-backdrop').classList.remove('hidden');
+            setTimeout(() => document.getElementById('widget-backdrop').classList.add('opacity-100'), 10);
+            document.getElementById('widget-panel').classList.add('open');
+            document.getElementById('widget-trigger').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function closeWidget() {
+            document.getElementById('widget-backdrop').classList.remove('opacity-100');
+            setTimeout(() => document.getElementById('widget-backdrop').classList.add('hidden'), 300);
+            document.getElementById('widget-panel').classList.remove('open');
+            document.getElementById('widget-trigger').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function startCheck(e) {
+            e.preventDefault();
+            const name = document.getElementById('w-organismo').value;
+            const email = document.getElementById('w-email').value;
+
+            if (!name) { alert('Por favor, ingresá el nombre del organismo'); return; }
+
+            organismData = { name, email };
+            document.getElementById('step-intro').classList.add('hidden');
+            document.getElementById('step-questions').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = widgetQuestions[currentQuestion];
+            const progress = ((currentQuestion + 1) / widgetQuestions.length) * 100;
+
+            document.getElementById('question-category').innerText = q.category;
+            document.getElementById('question-progress-text').innerText = `${currentQuestion + 1} / ${widgetQuestions.length}`;
+            document.getElementById('question-progress-bar').style.width = `${progress}%`;
+            document.getElementById('question-text').innerText = q.text;
+
+            const container = document.getElementById('question-container');
+            container.style.opacity = 0;
+            setTimeout(() => container.style.opacity = 1, 50);
+        }
+
+        function answerQuestion(val) {
+            answers.push({ category: widgetQuestions[currentQuestion].category, value: val });
+
+            if (currentQuestion < widgetQuestions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('step-questions').classList.add('hidden');
+            document.getElementById('step-results').classList.remove('hidden');
+
+            const totalScore = answers.reduce((acc, curr) => acc + curr.value, 0);
+            document.getElementById('res-organismo').innerText = organismData.name;
+            document.getElementById('res-score').innerText = totalScore;
+
+            // Animación círculo principal (radio=50, circumference=2*PI*50)
+            const circle = document.getElementById('res-circle');
+            const circumference = 314.16;
+            const offset = circumference - (totalScore / 34) * circumference;
+            setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
+
+            // Determinar Nivel
+            let level = { tag: 'Inicial', name: 'Manual y Fragmentado', desc: 'Sistemas aislados y dependientes de procesos físicos. Riesgo alto de falta de integridad.' };
+            if (totalScore >= 9) level = { tag: 'En Desarrollo', name: 'Digitalización Parcial', desc: 'Existen herramientas digitales pero no están conectadas. Datos en silos.' };
+            if (totalScore >= 17) level = { tag: 'Integrado', name: 'Gestión Conectada', desc: 'Sistemas interoperables y trazabilidad básica garantizada.' };
+            if (totalScore >= 25) level = { tag: 'Optimizado', name: 'Ecosistema de Datos', desc: 'Toma de decisiones basada en métricas en tiempo real.' };
+            if (totalScore >= 31) level = { tag: 'Referente', name: 'Arquitectura Madura', desc: 'Máxima eficiencia operativa y estándares de transparencia global.' };
+
+            document.getElementById('res-level-tag').innerText = `Nivel: ${level.tag}`;
+            document.getElementById('res-level-name').innerText = level.name;
+            document.getElementById('res-level-desc').innerText = `"${level.desc}"`;
+
+            // Calcular puntajes por dimensión
+            const dimScores = {};
+            answers.forEach(a => {
+                dimScores[a.category] = (dimScores[a.category] || 0) + a.value;
+            });
+
+            // Colores de la marca por dimensión
+            const dimColors = {
+                'Canales y Atención': '#8A2B88',
+                'Datos y Trazabilidad': '#E6217E',
+                'Procesos y Flujos': '#F99D1C',
+                'Cultura y Capacidades': '#F4D03F',
+                'Gobierno y Continuidad': '#110711'
+            };
+
+            const dimShortNames = {
+                'Canales y Atención': 'Canales',
+                'Datos y Trazabilidad': 'Datos',
+                'Procesos y Flujos': 'Procesos',
+                'Cultura y Capacidades': 'Cultura',
+                'Gobierno y Continuidad': 'Gobierno'
+            };
+
+            // Generar Donuts SVG por dimensión
+            const donutsContainer = document.getElementById('res-donuts');
+            const donutR = 28;
+            const donutCirc = 2 * Math.PI * donutR;
+
+            let donutsHtml = '';
+            Object.keys(dimScores).forEach((dim, idx) => {
+                const maxPossible = widgetQuestions.filter(q => q.category === dim).length * 2;
+                const score = dimScores[dim];
+                const pct = Math.round((score / maxPossible) * 100);
+                const color = dimColors[dim] || '#8A2B88';
+                const shortName = dimShortNames[dim] || dim;
+                const donutOffset = donutCirc - (score / maxPossible) * donutCirc;
+
+                donutsHtml += `
+                    <div class="flex flex-col items-center bg-white/5 rounded-xl p-3 border border-white/5">
+                        <svg class="w-16 h-16 transform -rotate-90 mb-2" viewBox="0 0 64 64">
+                            <circle cx="32" cy="32" r="${donutR}" stroke="rgba(255,255,255,0.06)" stroke-width="5" fill="transparent" />
+                            <circle cx="32" cy="32" r="${donutR}" stroke="${color}" stroke-width="5" fill="transparent"
+                                stroke-dasharray="${donutCirc}" stroke-dashoffset="${donutCirc}" stroke-linecap="round"
+                                class="donut-arc" data-target="${donutOffset}"
+                                style="transition: stroke-dashoffset 1s ease ${idx * 0.15}s;" />
+                        </svg>
+                        <span class="text-sm font-bold" style="color:${color}">${pct}%</span>
+                        <span class="text-[8px] text-gray-500 uppercase tracking-widest font-bold text-center leading-tight mt-1">${shortName}</span>
+                    </div>
+                `;
+            });
+            donutsContainer.innerHTML = donutsHtml;
+
+            // Animar los donuts después de insertar
+            setTimeout(() => {
+                document.querySelectorAll('.donut-arc').forEach(arc => {
+                    arc.style.strokeDashoffset = arc.dataset.target;
+                });
+            }, 150);
+
+            // Ordenar por score relativo (dimensiones más débiles primero)
+            const sortedDims = Object.keys(dimScores).sort((a, b) => {
+                const countA = widgetQuestions.filter(q => q.category === a).length;
+                const countB = widgetQuestions.filter(q => q.category === b).length;
+                return (dimScores[a] / (countA * 2)) - (dimScores[b] / (countB * 2));
+            });
+
+            const weaknessesHtml = sortedDims.slice(0, 2).map(dim => {
+                const maxP = widgetQuestions.filter(q => q.category === dim).length * 2;
+                const pct = Math.round((dimScores[dim] / maxP) * 100);
+                const color = dimColors[dim] || '#E6217E';
+                return `
+                    <div class="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
+                        <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style="background:${color}20; border: 1.5px solid ${color}">
+                            <i class="ph-bold ph-warning text-xs" style="color:${color}"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <span class="text-[10px] font-bold uppercase tracking-widest">${dim}</span>
+                            <div class="h-1 w-full bg-white/5 rounded-full mt-1 overflow-hidden"><div class="h-full rounded-full" style="width:${pct}%; background:${color}"></div></div>
+                        </div>
+                        <span class="text-[10px] font-bold" style="color:${color}">${pct}%</span>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('res-weaknesses').innerHTML = weaknessesHtml;
+
+            // Envío a Formspree (Background)
+            sendToFormspree(totalScore, level.tag);
+        }
+
+        async function sendToFormspree(score, level) {
+            const data = {
+                subject: `RESULTADO DIAGNÓSTICO: ${organismData.name}`,
+                organismo: organismData.name,
+                email: organismData.email,
+                puntaje: score,
+                nivel: level,
+                detalles: JSON.stringify(answers)
+            };
+
+            try {
+                fetch('https://formspree.io/f/xvzbnbzo', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+                });
+            } catch (e) { console.error('Error enviando diagnóstico'); }
+        }
+
+        function downloadResults() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const pw = doc.internal.pageSize.getWidth();
+            const ph = doc.internal.pageSize.getHeight();
+
+            // Brand Colors
+            const purple = [138, 43, 136];
+            const magenta = [230, 33, 126];
+            const orange = [249, 157, 28];
+            const yellow = [244, 208, 63];
+            const dark = [17, 7, 17];
+            const gray = [120, 120, 130];
+            const lightBg = [250, 250, 250];
+
+            const totalScore = parseInt(document.getElementById('res-score').innerText);
+            const levelTag = document.getElementById('res-level-tag').innerText;
+            const levelName = document.getElementById('res-level-name').innerText;
+            const levelDesc = document.getElementById('res-level-desc').innerText;
+
+            // Calcular scores por dimensión
+            const dimScores = {};
+            answers.forEach(a => { dimScores[a.category] = (dimScores[a.category] || 0) + a.value; });
+            const dimColorMap = {
+                'Canales y Atención': purple,
+                'Datos y Trazabilidad': magenta,
+                'Procesos y Flujos': orange,
+                'Cultura y Capacidades': yellow,
+                'Gobierno y Continuidad': dark
+            };
+
+            // === HEADER GRADIENT BAR ===
+            const gradSteps = 200;
+            for (let i = 0; i < gradSteps; i++) {
+                const t = i / gradSteps;
+                let r, g, b;
+                if (t < 0.5) {
+                    const lt = t * 2;
+                    r = purple[0] + (magenta[0] - purple[0]) * lt;
+                    g = purple[1] + (magenta[1] - purple[1]) * lt;
+                    b = purple[2] + (magenta[2] - purple[2]) * lt;
+                } else {
+                    const lt = (t - 0.5) * 2;
+                    r = magenta[0] + (orange[0] - magenta[0]) * lt;
+                    g = magenta[1] + (orange[1] - magenta[1]) * lt;
+                    b = magenta[2] + (orange[2] - magenta[2]) * lt;
+                }
+                doc.setFillColor(r, g, b);
+                doc.rect(i * (pw / gradSteps), 0, (pw / gradSteps) + 0.5, 3, 'F');
+            }
+
+            // === HEADER ===
+            doc.setFillColor(...dark);
+            doc.rect(0, 3, pw, 32, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18);
+            doc.text('FUNDACIÓN RED SOCIAL', 15, 17);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(180, 180, 180);
+            doc.text('Diagnóstico de Madurez Digital | Arquitectura Pública Integrada', 15, 25);
+            doc.setFontSize(8);
+            doc.text(new Date().toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' }), pw - 15, 17, { align: 'right' });
+            doc.text('redsocial.org', pw - 15, 23, { align: 'right' });
+
+            let y = 45;
+
+            // === ORGANISMO INFO ===
+            doc.setFillColor(...lightBg);
+            doc.roundedRect(15, y, pw - 30, 20, 3, 3, 'F');
+            doc.setTextColor(...dark);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(12);
+            doc.text(organismData.name || 'Organismo', 22, y + 9);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(8);
+            doc.setTextColor(...gray);
+            doc.text(organismData.email || 'Sin email', 22, y + 15);
+
+            y += 28;
+
+            // === SCORE PRINCIPAL ===
+            doc.setFillColor(...dark);
+            doc.roundedRect(15, y, pw - 30, 42, 3, 3, 'F');
+
+            // Donut principal (arco SVG simulado)
+            const cx = 42, cy = y + 21, cr = 14;
+            doc.setDrawColor(50, 50, 50);
+            doc.setLineWidth(3);
+            doc.circle(cx, cy, cr, 'S');
+            const pctTotal = totalScore / 34;
+            doc.setDrawColor(...magenta);
+            doc.setLineWidth(3);
+            // Dibujar arco como múltiples segmentos
+            const arcSegments = Math.floor(pctTotal * 60);
+            for (let i = 0; i < arcSegments; i++) {
+                const angle1 = -Math.PI / 2 + (i / 60) * 2 * Math.PI;
+                const angle2 = -Math.PI / 2 + ((i + 1) / 60) * 2 * Math.PI;
+                const x1 = cx + cr * Math.cos(angle1);
+                const y1 = cy + cr * Math.sin(angle1);
+                const x2 = cx + cr * Math.cos(angle2);
+                const y2 = cy + cr * Math.sin(angle2);
+                doc.line(x1, y1, x2, y2);
+            }
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(16);
+            doc.text(`${totalScore}`, cx, cy + 2, { align: 'center' });
+            doc.setFontSize(6);
+            doc.setTextColor(150, 150, 150);
+            doc.text('de 34 pts', cx, cy + 7, { align: 'center' });
+
+            // Nivel
+            doc.setTextColor(...magenta);
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'bold');
+            doc.text(levelTag.toUpperCase(), 68, y + 12);
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(14);
+            doc.text(levelName, 68, y + 20);
+            doc.setTextColor(160, 160, 170);
+            doc.setFont('helvetica', 'italic');
+            doc.setFontSize(7);
+            const descLines = doc.splitTextToSize(levelDesc.replace(/"/g, ''), pw - 90);
+            doc.text(descLines, 68, y + 27);
+
+            y += 50;
+
+            // === DIMENSIONES ===
+            doc.setTextColor(...dark);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11);
+            doc.text('PUNTAJE POR DIMENSIÓN', 15, y);
+            y += 6;
+
+            // Gradient line
+            for (let i = 0; i < 100; i++) {
+                const t = i / 100;
+                const r = purple[0] + (magenta[0] - purple[0]) * t;
+                const g = purple[1] + (magenta[1] - purple[1]) * t;
+                const b = purple[2] + (magenta[2] - purple[2]) * t;
+                doc.setFillColor(r, g, b);
+                doc.rect(15 + i * ((pw - 30) / 100), y, ((pw - 30) / 100) + 0.2, 0.8, 'F');
+            }
+            y += 6;
+
+            const dims = Object.keys(dimScores);
+            const barW = pw - 30;
+
+            dims.forEach(dim => {
+                const maxP = widgetQuestions.filter(q => q.category === dim).length * 2;
+                const score = dimScores[dim];
+                const pct = Math.round((score / maxP) * 100);
+                const color = dimColorMap[dim] || magenta;
+
+                // Dimension card
+                doc.setFillColor(248, 248, 250);
+                doc.roundedRect(15, y, barW, 16, 2, 2, 'F');
+
+                // Mini donut
+                const dx = 25, dy = y + 8, dr = 5;
+                doc.setDrawColor(230, 230, 230);
+                doc.setLineWidth(2);
+                doc.circle(dx, dy, dr, 'S');
+                doc.setDrawColor(...color);
+                const dimSegs = Math.floor((score / maxP) * 40);
+                for (let i = 0; i < dimSegs; i++) {
+                    const a1 = -Math.PI / 2 + (i / 40) * 2 * Math.PI;
+                    const a2 = -Math.PI / 2 + ((i + 1) / 40) * 2 * Math.PI;
+                    doc.line(dx + dr * Math.cos(a1), dy + dr * Math.sin(a1), dx + dr * Math.cos(a2), dy + dr * Math.sin(a2));
+                }
+
+                doc.setTextColor(...dark);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9);
+                doc.text(dim, 35, y + 6);
+
+                // Progress bar
+                const pbX = 35, pbY = y + 9, pbW = barW - 50, pbH = 3;
+                doc.setFillColor(235, 235, 240);
+                doc.roundedRect(pbX, pbY, pbW, pbH, 1.5, 1.5, 'F');
+                doc.setFillColor(...color);
+                doc.roundedRect(pbX, pbY, pbW * (pct / 100), pbH, 1.5, 1.5, 'F');
+
+                // Percentage
+                doc.setTextColor(...color);
+                doc.setFontSize(10);
+                doc.text(`${pct}%`, barW + 5, y + 10, { align: 'right' });
+
+                y += 20;
+            });
+
+            y += 5;
+
+            // === RECOMENDACIONES ===
+            doc.setTextColor(...dark);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11);
+            doc.text('FOCOS DE INTERVENCIÓN PRIORITARIOS', 15, y);
+            y += 8;
+
+            const sortedD = Object.keys(dimScores).sort((a, b) => {
+                const cA = widgetQuestions.filter(q => q.category === a).length;
+                const cB = widgetQuestions.filter(q => q.category === b).length;
+                return (dimScores[a] / (cA * 2)) - (dimScores[b] / (cB * 2));
+            });
+
+            sortedD.slice(0, 2).forEach(dim => {
+                const maxP = widgetQuestions.filter(q => q.category === dim).length * 2;
+                const pct = Math.round((dimScores[dim] / maxP) * 100);
+                const color = dimColorMap[dim] || magenta;
+
+                doc.setFillColor(color[0], color[1], color[2], 0.08);
+                doc.setDrawColor(...color);
+                doc.setLineWidth(0.3);
+                doc.roundedRect(15, y, barW, 12, 2, 2, 'FD');
+                doc.setFillColor(...color);
+                doc.circle(22, y + 6, 2.5, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(6);
+                doc.text('!', 22, y + 7.2, { align: 'center' });
+
+                doc.setTextColor(...dark);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.text(`${dim}  —  ${pct}% de madurez`, 28, y + 7);
+
+                y += 16;
+            });
+
+            y += 5;
+
+            // === FOOTER ===
+            // Gradient line
+            for (let i = 0; i < 100; i++) {
+                const t = i / 100;
+                const r = purple[0] + (orange[0] - purple[0]) * t;
+                const g = purple[1] + (orange[1] - purple[1]) * t;
+                const b = purple[2] + (orange[2] - purple[2]) * t;
+                doc.setFillColor(r, g, b);
+                doc.rect(15 + i * ((pw - 30) / 100), y, ((pw - 30) / 100) + 0.2, 0.5, 'F');
+            }
+            y += 6;
+
+            doc.setTextColor(...gray);
+            doc.setFont('helvetica', 'italic');
+            doc.setFontSize(7);
+            doc.text('Este informe fue generado automáticamente por el sistema de diagnóstico de la Fundación Red Social.', 15, y);
+            doc.text('Para una evaluación técnica completa, contacte al Comité Técnico a través de nuestro portal.', 15, y + 4);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(...purple);
+            doc.text('redsocial.org  |  contacto@redsocial.org', pw / 2, y + 12, { align: 'center' });
+
+            // Bottom gradient bar
+            for (let i = 0; i < gradSteps; i++) {
+                const t = i / gradSteps;
+                let r, g, b;
+                if (t < 0.5) { const lt = t * 2; r = purple[0] + (magenta[0] - purple[0]) * lt; g = purple[1] + (magenta[1] - purple[1]) * lt; b = purple[2] + (magenta[2] - purple[2]) * lt; }
+                else { const lt = (t - 0.5) * 2; r = magenta[0] + (orange[0] - magenta[0]) * lt; g = magenta[1] + (orange[1] - magenta[1]) * lt; b = magenta[2] + (orange[2] - magenta[2]) * lt; }
+                doc.setFillColor(r, g, b);
+                doc.rect(i * (pw / gradSteps), ph - 3, (pw / gradSteps) + 0.5, 3, 'F');
+            }
+
+            doc.save(`Diagnostico_Madurez_${organismData.name.replace(/\s+/g, '_')}.pdf`);
+        }
+
+        function openTechnicalForm() {
+            // Precargar datos del widget en el formulario de la sección #contacto
+            document.getElementById('tech-organismo').value = organismData.name;
+            document.getElementById('tech-email').value = organismData.email;
+
+            const totalScore = document.getElementById('res-score').innerText;
+            const level = document.getElementById('res-level-tag').innerText;
+
+            const summaryText = `DIAGNÓSTICO FINALIZADO\nOrganismo: ${organismData.name}\nPuntaje: ${totalScore}/34\n${level}\nDimensiones Críticas: Ver detalles adjuntos en sistema.`;
+
+            document.getElementById('tech-summary').value = summaryText;
+            document.getElementById('tech-summary-container').classList.remove('hidden');
+
+            // Revelar la sección oculta con animación suave
+            const contactSection = document.getElementById('contacto');
+            contactSection.style.maxHeight = '1200px';
+            contactSection.style.opacity = '1';
+            contactSection.style.padding = '';
+
+            // Scroll suave después de que la animación inicie
+            setTimeout(() => {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => document.getElementById('tech-name').focus(), 500);
+            }, 400);
         }
     </script>
 </body>
