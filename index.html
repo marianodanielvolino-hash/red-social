@@ -97,9 +97,26 @@
             transform: translateY(0);
         }
 
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+            touch-action: pan-y;
+        }
+
         #widget-panel {
             transform: translateX(100%);
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden !important;
+            touch-action: pan-y;
         }
 
         @media (max-width: 640px) {
@@ -2565,7 +2582,7 @@
                 <!-- Dashboard de Donuts por Dimensión -->
                 <div class="space-y-3">
                     <h6 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Puntaje por Dimensión</h6>
-                    <div id="res-donuts" class="grid grid-cols-2 xs:grid-cols-3 gap-3">
+                    <div id="res-donuts" class="grid grid-cols-2 xs:grid-cols-3 gap-2 sm:gap-3">
                         <!-- Se llena dinámicamente -->
                     </div>
                 </div>
@@ -2756,19 +2773,19 @@
                 const pct = Math.round((score / maxPossible) * 100);
                 const color = dimColors[dim] || '#8A2B88';
                 const shortName = dimShortNames[dim] || dim;
-                const donutOffset = donutCirc - (score / maxPossible) * donutCirc;
+                const currentOffset = donutCirc - (score / maxPossible) * donutCirc;
 
                 donutsHtml += `
-                    <div class="flex flex-col items-center bg-white/5 rounded-xl p-3 border border-white/5">
-                        <svg class="w-16 h-16 transform -rotate-90 mb-2" viewBox="0 0 64 64">
+                    <div class="flex flex-col items-center bg-white/5 rounded-xl p-2 sm:p-3 border border-white/5">
+                        <svg class="w-12 h-12 sm:w-16 sm:h-16 transform -rotate-90 mb-2" viewBox="0 0 64 64">
                             <circle cx="32" cy="32" r="${donutR}" stroke="rgba(255,255,255,0.06)" stroke-width="5" fill="transparent" />
                             <circle cx="32" cy="32" r="${donutR}" stroke="${color}" stroke-width="5" fill="transparent"
                                 stroke-dasharray="${donutCirc}" stroke-dashoffset="${donutCirc}" stroke-linecap="round"
-                                class="donut-arc" data-target="${donutOffset}"
+                                class="donut-arc" data-target="${currentOffset}"
                                 style="transition: stroke-dashoffset 1s ease ${idx * 0.15}s;" />
                         </svg>
-                        <span class="text-sm font-bold" style="color:${color}">${pct}%</span>
-                        <span class="text-[8px] text-gray-500 uppercase tracking-widest font-bold text-center leading-tight mt-1">${shortName}</span>
+                        <span class="text-[12px] sm:text-sm font-bold" style="color:${color}">${pct}%</span>
+                        <span class="text-[7px] sm:text-[8px] text-gray-500 uppercase tracking-widest font-bold text-center leading-tight mt-1">${shortName}</span>
                     </div>
                 `;
             });
