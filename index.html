@@ -2627,11 +2627,21 @@
                         de trazabilidad digital."</p>
                 </div>
 
-                <!-- Dashboard de Donuts por Dimensión -->
-                <div class="space-y-3">
-                    <h6 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Puntaje por Dimensión</h6>
-                    <div id="res-donuts" class="grid grid-cols-2 xs:grid-cols-3 gap-2 sm:gap-3">
-                        <!-- Se llena dinámicamente -->
+                <!-- Dashboard de Unificado por Dimensión (Multi-anillo) -->
+                <div class="space-y-4">
+                    <h6 class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] text-center mt-6">
+                        Rendimiento por Dimensión</h6>
+                    <div id="res-unified-container"
+                        class="relative flex flex-col items-center justify-center bg-white/5 border border-white/5 p-8 rounded-[2.5rem] shadow-inner overflow-hidden">
+                        <!-- Gran Anillo Segmentado -->
+                        <div id="res-multi-ring-svg" class="w-48 h-48 sm:w-56 sm:h-56 relative transform -rotate-90">
+                            <!-- SVG se genera en JS -->
+                        </div>
+
+                        <!-- Leyenda Detallada -->
+                        <div id="res-multi-legend" class="grid grid-cols-2 gap-x-6 gap-y-3 mt-10 w-full px-2">
+                            <!-- Leyenda generada en JS -->
+                        </div>
                     </div>
                 </div>
 
@@ -2846,42 +2856,74 @@
                 'Clima y Cultura': 'Clima'
             };
 
-            // Generar Donuts SVG por dimensión
-            const donutsContainer = document.getElementById('res-donuts');
-            const donutR = 28;
-            const donutCirc = 2 * Math.PI * donutR;
+            // Generar ANILLO UNIFICADO (Segmentado)
+            const ringContainer = document.getElementById('res-multi-ring-svg');
+            const legendContainer = document.getElementById('res-multi-legend');
 
-            let donutsHtml = '';
-            Object.keys(dimScores).forEach((dim, idx) => {
-                const maxPossible = activeQuestions.filter(q => q.category === dim).length * 2;
+            const dims = Object.keys(dimScores);
+            const n = dims.length;
+            const r = 40;
+            const circum = 2 * Math.PI * r;
+            const gapDegrees = n > 1 ? 5 : 0; // Separación entre segmentos
+            const arcDegrees = (360 / n) - gapDegrees;
+            const arcUnits = (arcDegrees / 360) * circum;
+
+            let svgHtml = `<svg viewBox="0 0 100 100" class="w-full h-full">`;
+            let legendHtml = '';
+
+            dims.forEach((dim, i) => {
+                const maxP = activeQuestions.filter(q => q.category === dim).length * 2;
                 const score = dimScores[dim];
-                const pct = Math.round((score / maxPossible) * 100);
+                const pct = Math.round((score / maxP) * 100);
                 const color = dimColors[dim] || '#8A2B88';
                 const shortName = dimShortNames[dim] || dim;
-                const currentOffset = donutCirc - (score / maxPossible) * donutCirc;
 
-                donutsHtml += `
-                    <div class="flex flex-col items-center bg-white/5 rounded-xl p-2 sm:p-3 border border-white/5">
-                        <svg class="w-12 h-12 sm:w-16 sm:h-16 transform -rotate-90 mb-2" viewBox="0 0 64 64">
-                            <circle cx="32" cy="32" r="${donutR}" stroke="rgba(255,255,255,0.06)" stroke-width="5" fill="transparent" />
-                            <circle cx="32" cy="32" r="${donutR}" stroke="${color}" stroke-width="5" fill="transparent"
-                                stroke-dasharray="${donutCirc}" stroke-dashoffset="${donutCirc}" stroke-linecap="round"
-                                class="donut-arc" data-target="${currentOffset}"
-                                style="transition: stroke-dashoffset 1s ease ${idx * 0.15}s;" />
-                        </svg>
-                        <span class="text-[12px] sm:text-sm font-bold" style="color:${color}">${pct}%</span>
-                        <span class="text-[7px] sm:text-[8px] text-gray-500 uppercase tracking-widest font-bold text-center leading-tight mt-1">${shortName}</span>
+                // Rotación para este segmento
+                const rotation = (i * (360 / n));
+                const progressUnits = (score / maxP) * arcUnits;
+
+                // Segmento Fondo (Sombra clara)
+                svgHtml += `
+                    <circle cx="50" cy="50" r="${r}" 
+                        fill="transparent" stroke="white" stroke-width="8" stroke-opacity="0.05"
+                        stroke-dasharray="${arcUnits} ${circum - arcUnits}"
+                        transform="rotate(${rotation} 50 50)" />
+                `;
+
+                // Segmento Progreso (Color)
+                svgHtml += `
+                    <circle cx="50" cy="50" r="${r}" 
+                        fill="transparent" stroke="${color}" stroke-width="8" stroke-linecap="round"
+                        stroke-dasharray="0 ${circum}"
+                        class="multi-ring-arc" data-progress="${progressUnits}" data-total="${circum}"
+                        transform="rotate(${rotation} 50 50)"
+                        style="transition: stroke-dasharray 1.2s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.15}s;" />
+                `;
+
+                // Item de Leyenda
+                legendHtml += `
+                    <div class="flex items-center gap-2">
+                        <div class="w-2.5 h-2.5 rounded-full" style="background:${color}"></div>
+                        <div class="flex flex-col">
+                            <span class="text-[9px] font-bold text-white uppercase tracking-wider">${shortName}</span>
+                            <span class="text-[11px] font-bold" style="color:${color}">${pct}%</span>
+                        </div>
                     </div>
                 `;
             });
-            donutsContainer.innerHTML = donutsHtml;
 
-            // Animar los donuts después de insertar
-            setTimeout(() => {
-                document.querySelectorAll('.donut-arc').forEach(arc => {
-                    arc.style.strokeDashoffset = arc.dataset.target;
+            svgHtml += `</svg>`;
+            ringContainer.innerHTML = svgHtml;
+            legendContainer.innerHTML = legendHtml;
+
+            // Animar el anillo después de insertar (un frame de delay para la transición)
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.multi-ring-arc').forEach(arc => {
+                    const prog = arc.getAttribute('data-progress');
+                    const total = arc.getAttribute('data-total');
+                    arc.setAttribute('stroke-dasharray', `${prog} ${total}`);
                 });
-            }, 150);
+            });
 
             // Ordenar por score relativo (dimensiones más débiles primero)
             const sortedDims = Object.keys(dimScores).sort((a, b) => {
@@ -3088,48 +3130,54 @@
             const dims = Object.keys(dimScores);
             const barW = pw - 30;
 
-            dims.forEach(dim => {
+            // === UNIFIED RING (DIMENSIONES EN PDF) ===
+            const cxD = 55, cyD = y + 25, crD = 20;
+            const nD = dims.length;
+            const gapD = 0.08; // gap in radians
+            const totalArcD = (2 * Math.PI) / nD;
+            const usableArcD = totalArcD - gapD;
+
+            dims.forEach((dim, i) => {
                 const maxP = activeQuestions.filter(q => q.category === dim).length * 2;
                 const score = dimScores[dim];
-                const pct = Math.round((score / maxP) * 100);
+                const pct = score / maxP;
                 const color = dimColorMap[dim] || magenta;
 
-                // Dimension card
-                doc.setFillColor(248, 248, 250);
-                doc.roundedRect(15, y, barW, 16, 2, 2, 'F');
+                const startAngle = -Math.PI / 2 + (i * totalArcD);
 
-                // Mini donut
-                const dx = 25, dy = y + 8, dr = 5;
-                doc.setDrawColor(230, 230, 230);
-                doc.setLineWidth(2);
-                doc.circle(dx, dy, dr, 'S');
-                doc.setDrawColor(...color);
-                const dimSegs = Math.floor((score / maxP) * 40);
-                for (let i = 0; i < dimSegs; i++) {
-                    const a1 = -Math.PI / 2 + (i / 40) * 2 * Math.PI;
-                    const a2 = -Math.PI / 2 + ((i + 1) / 40) * 2 * Math.PI;
-                    doc.line(dx + dr * Math.cos(a1), dy + dr * Math.sin(a1), dx + dr * Math.cos(a2), dy + dr * Math.sin(a2));
+                // Fondo segmento
+                doc.setDrawColor(240, 240, 243);
+                doc.setLineWidth(5);
+                for (let j = 0; j < 20; j++) {
+                    const a1 = startAngle + (j / 20) * usableArcD;
+                    const a2 = startAngle + ((j + 1) / 20) * usableArcD;
+                    doc.line(cxD + crD * Math.cos(a1), cyD + crD * Math.sin(a1), cxD + crD * Math.cos(a2), cyD + crD * Math.sin(a2));
                 }
 
-                doc.setTextColor(...dark);
-                doc.setFont('helvetica', 'bold');
-                doc.setFontSize(9);
-                doc.text(dim, 35, y + 6);
+                // Progreso segmento
+                doc.setDrawColor(...color);
+                doc.setLineWidth(5);
+                const stepsP = Math.max(1, Math.floor(pct * 25));
+                for (let j = 0; j < stepsP; j++) {
+                    const a1 = startAngle + (j / 25) * usableArcD;
+                    const a2 = startAngle + ((j + 1) / 25) * usableArcD;
+                    doc.line(cxD + crD * Math.cos(a1), cyD + crD * Math.sin(a1), cxD + crD * Math.cos(a2), cyD + crD * Math.sin(a2));
+                }
 
-                // Progress bar
-                const pbX = 35, pbY = y + 9, pbW = barW - 50, pbH = 3;
-                doc.setFillColor(235, 235, 240);
-                doc.roundedRect(pbX, pbY, pbW, pbH, 1.5, 1.5, 'F');
+                // Leyenda a la derecha
+                const lx = 95, ly = y + 8 + (i * 6);
                 doc.setFillColor(...color);
-                doc.roundedRect(pbX, pbY, pbW * (pct / 100), pbH, 1.5, 1.5, 'F');
-
-                // Percentage
-                doc.setTextColor(...color);
-                doc.setFontSize(10);
-                doc.text(`${pct}%`, barW + 5, y + 10, { align: 'right' });
-
-                y += 20;
+                doc.circle(lx, ly, 1.2, 'F');
+                doc.setTextColor(50, 50, 50);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(7);
+                doc.text(`${Math.round(pct * 100)}%`, lx + 4, ly + 1);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(120, 120, 120);
+                doc.text(dim, lx + 12, ly + 1);
             });
+
+            y += 60;
 
             y += 5;
 
