@@ -2473,8 +2473,56 @@
                         <input id="w-email" type="email" placeholder="para recibir el reporte"
                             class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-brand-magenta outline-none transition-all">
                     </div>
+
+                    <!-- NUEVO: Selector de Tipo de Diagnóstico -->
+                    <div class="space-y-3">
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 font-bold">Tipo de
+                            Evaluación</label>
+                        <div class="grid grid-cols-1 gap-2">
+                            <button type="button" onclick="selectDiagnostic('digital')" id="diag-digital"
+                                class="diag-option bg-white/5 border border-white/10 rounded-xl p-3 text-left hover:border-brand-magenta transition-all group">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-brand-purple/20 flex items-center justify-center text-brand-purple">
+                                        <i class="ph-bold ph-hard-drive"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold">Madurez Digital (API)</p>
+                                        <p class="text-[9px] text-gray-500">Procesos, Datos y Canales.</p>
+                                    </div>
+                                </div>
+                            </button>
+                            <button type="button" onclick="selectDiagnostic('clima')" id="diag-clima"
+                                class="diag-option bg-white/5 border border-white/10 rounded-xl p-3 text-left hover:border-brand-magenta transition-all group">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-brand-orange/20 flex items-center justify-center text-brand-orange">
+                                        <i class="ph-bold ph-users"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold">Clima y Cultura</p>
+                                        <p class="text-[9px] text-gray-500">Bienestar, Liderazgo y Equipo.</p>
+                                    </div>
+                                </div>
+                            </button>
+                            <button type="button" onclick="selectDiagnostic('integral')" id="diag-integral"
+                                class="diag-option bg-brand-magenta/10 border-2 border-brand-magenta rounded-xl p-3 text-left hover:border-brand-magenta transition-all group">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-brand-magenta/20 flex items-center justify-center text-brand-magenta">
+                                        <i class="ph-bold ph-sparkle"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold">Diagnóstico Integral</p>
+                                        <p class="text-[9px] text-gray-500">Evaluación 360° (Recomendado).</p>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
                     <button type="submit"
-                        class="w-full bg-brand-magenta text-white font-bold py-4 rounded-xl hover:bg-magenta-600 transition-all flex items-center justify-center gap-2 uppercase text-xs tracking-widest mt-6">
+                        class="w-full bg-brand-magenta text-white font-bold py-4 rounded-xl hover:bg-magenta-600 transition-all flex items-center justify-center gap-2 uppercase text-xs tracking-widest mt-6 shadow-lg shadow-brand-magenta/20">
                         Comenzar Evaluación <i class="ph-bold ph-arrow-right"></i>
                     </button>
                 </form>
@@ -2665,6 +2713,21 @@
         let currentQuestion = 0;
         let answers = [];
         let organismData = { name: '', email: '' };
+        let selectedDiagnosticType = 'integral';
+        let activeQuestions = [];
+
+        function selectDiagnostic(type) {
+            selectedDiagnosticType = type;
+            document.querySelectorAll('.diag-option').forEach(opt => {
+                opt.classList.remove('border-2', 'border-brand-magenta', 'bg-brand-magenta/10');
+                opt.classList.add('bg-white/5', 'border-white/10');
+            });
+            const btn = document.getElementById(`diag-${type}`);
+            if (btn) {
+                btn.classList.add('border-2', 'border-brand-magenta', 'bg-brand-magenta/10');
+                btn.classList.remove('bg-white/5', 'border-white/10');
+            }
+        }
 
         function openWidget() {
             document.getElementById('widget-backdrop').classList.remove('hidden');
@@ -2687,18 +2750,29 @@
 
             if (!name) { alert('Por favor, ingresá el nombre del organismo'); return; }
 
+            // Filtrar preguntas según selección
+            if (selectedDiagnosticType === 'digital') {
+                activeQuestions = widgetQuestions.filter(q => q.category !== 'Clima y Cultura');
+            } else if (selectedDiagnosticType === 'clima') {
+                activeQuestions = widgetQuestions.filter(q => q.category === 'Clima y Cultura');
+            } else {
+                activeQuestions = [...widgetQuestions];
+            }
+
             organismData = { name, email };
+            currentQuestion = 0;
+            answers = [];
             document.getElementById('step-intro').classList.add('hidden');
             document.getElementById('step-questions').classList.remove('hidden');
             showQuestion();
         }
 
         function showQuestion() {
-            const q = widgetQuestions[currentQuestion];
-            const progress = ((currentQuestion + 1) / widgetQuestions.length) * 100;
+            const q = activeQuestions[currentQuestion];
+            const progress = ((currentQuestion + 1) / activeQuestions.length) * 100;
 
             document.getElementById('question-category').innerText = q.category;
-            document.getElementById('question-progress-text').innerText = `${currentQuestion + 1} / ${widgetQuestions.length}`;
+            document.getElementById('question-progress-text').innerText = `${currentQuestion + 1} / ${activeQuestions.length}`;
             document.getElementById('question-progress-bar').style.width = `${progress}%`;
             document.getElementById('question-text').innerText = q.text;
 
@@ -2708,9 +2782,10 @@
         }
 
         function answerQuestion(val) {
-            answers.push({ category: widgetQuestions[currentQuestion].category, value: val });
+            const q = activeQuestions[currentQuestion];
+            answers.push({ category: q.category, text: q.text, value: val });
 
-            if (currentQuestion < widgetQuestions.length - 1) {
+            if (currentQuestion < activeQuestions.length - 1) {
                 currentQuestion++;
                 showQuestion();
             } else {
@@ -2723,7 +2798,7 @@
             document.getElementById('step-results').classList.remove('hidden');
 
             const totalScore = answers.reduce((acc, curr) => acc + curr.value, 0);
-            const maxAvailablePoints = widgetQuestions.length * 2; // Cada pregunta vale máximo 2 pts
+            const maxAvailablePoints = activeQuestions.length * 2; // Cada pregunta vale máximo 2 pts
             document.getElementById('res-organismo').innerText = organismData.name;
             document.getElementById('res-score').innerText = totalScore;
             document.getElementById('res-score').nextElementSibling.innerText = `de ${maxAvailablePoints} pts`;
@@ -2778,7 +2853,7 @@
 
             let donutsHtml = '';
             Object.keys(dimScores).forEach((dim, idx) => {
-                const maxPossible = widgetQuestions.filter(q => q.category === dim).length * 2;
+                const maxPossible = activeQuestions.filter(q => q.category === dim).length * 2;
                 const score = dimScores[dim];
                 const pct = Math.round((score / maxPossible) * 100);
                 const color = dimColors[dim] || '#8A2B88';
@@ -2810,13 +2885,13 @@
 
             // Ordenar por score relativo (dimensiones más débiles primero)
             const sortedDims = Object.keys(dimScores).sort((a, b) => {
-                const countA = widgetQuestions.filter(q => q.category === a).length;
-                const countB = widgetQuestions.filter(q => q.category === b).length;
+                const countA = activeQuestions.filter(q => q.category === a).length;
+                const countB = activeQuestions.filter(q => q.category === b).length;
                 return (dimScores[a] / (countA * 2)) - (dimScores[b] / (countB * 2));
             });
 
             const weaknessesHtml = sortedDims.slice(0, 2).map(dim => {
-                const maxP = widgetQuestions.filter(q => q.category === dim).length * 2;
+                const maxP = activeQuestions.filter(q => q.category === dim).length * 2;
                 const pct = Math.round((dimScores[dim] / maxP) * 100);
                 const color = dimColors[dim] || '#E6217E';
                 return `
@@ -3014,7 +3089,7 @@
             const barW = pw - 30;
 
             dims.forEach(dim => {
-                const maxP = widgetQuestions.filter(q => q.category === dim).length * 2;
+                const maxP = activeQuestions.filter(q => q.category === dim).length * 2;
                 const score = dimScores[dim];
                 const pct = Math.round((score / maxP) * 100);
                 const color = dimColorMap[dim] || magenta;
