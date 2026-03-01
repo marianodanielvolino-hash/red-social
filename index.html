@@ -97,10 +97,17 @@
             transform: translateY(0);
         }
 
-        /* Widget Madurez */
         #widget-panel {
             transform: translateX(100%);
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (max-width: 640px) {
+            #widget-panel {
+                width: 100% !important;
+                max-width: 100% !important;
+                border-left: none;
+            }
         }
 
         #widget-panel.open {
@@ -222,7 +229,10 @@
                         class="block px-3 py-2 text-brand-magenta font-bold hover:bg-gray-50 rounded-md">Documentos
                         Técnicos</a>
                     <a href="#equipo" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">Equipo</a>
-                    <button onclick="openPortalLogin()"
+                    <button onclick="closeMobileMenu(); openWidget();"
+                        class="block w-full text-left px-3 py-2 text-brand-magenta font-bold hover:bg-gray-50 rounded-md flex items-center gap-2"><i
+                            class="ph-bold ph-pulse"></i> Diagnóstico Digital</button>
+                    <button onclick="closeMobileMenu(); openPortalLogin();"
                         class="block w-full text-left px-3 py-2 text-brand-purple font-bold hover:bg-gray-50 rounded-md flex items-center gap-2"><i
                             class="ph-bold ph-lock-key"></i> Acceso Portal</button>
                 </div>
@@ -758,43 +768,49 @@
                 <div
                     class="flex items-center gap-12 w-max animate-infinite-scroll hover:[animation-play-state:paused] px-8">
                     <!-- Set 1 -->
-                    <img loading="lazy" src="CFI.jpg" alt="CFI" class="w-[8cm] h-[4cm] object-contain transition-all"
+                    <img loading="lazy" src="CFI.jpg" alt="CFI"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                     <img loading="lazy" src="Santa FE.jpg" alt="Santa Fe"
-                        class="w-[8cm] h-[4cm] object-contain transition-all"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                     <img loading="lazy" src="entre rios.jpg" alt="Entre Ríos"
-                        class="w-[8cm] h-[4cm] object-contain transition-all"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                     <img loading="lazy" src="chubut.png" alt="Chubut"
-                        class="w-[8cm] h-[4cm] object-contain transition-all"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="GCBA.png" alt="GCBA" class="w-[8cm] h-[4cm] object-contain transition-all"
+                    <img loading="lazy" src="GCBA.png" alt="GCBA"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                     <img loading="lazy" src="descarga.png" alt="Buenos Aires"
-                        class="w-[8cm] h-[4cm] object-contain transition-all"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="SAAS.png" alt="SAAS" class="w-[8cm] h-[4cm] object-contain transition-all"
+                    <img loading="lazy" src="SAAS.png" alt="SAAS"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
 
                     <!-- Duplicate for infinite effect -->
-                    <img loading="lazy" src="CFI.jpg" alt="CFI" class="w-[8cm] h-[4cm] object-contain transition-all"
+                    <img loading="lazy" src="CFI.jpg" alt="CFI"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                     <img loading="lazy" src="Santa FE.jpg" alt="Santa Fe"
-                        class="w-[8cm] h-[4cm] object-contain transition-all"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                     <img loading="lazy" src="entre rios.jpg" alt="Entre Ríos"
-                        class="w-[8cm] h-[4cm] object-contain transition-all"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                     <img loading="lazy" src="chubut.png" alt="Chubut"
-                        class="w-[8cm] h-[4cm] object-contain transition-all"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="GCBA.png" alt="GCBA" class="w-[8cm] h-[4cm] object-contain transition-all"
+                    <img loading="lazy" src="GCBA.png" alt="GCBA"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                     <img loading="lazy" src="descarga.png" alt="Buenos Aires"
-                        class="w-[8cm] h-[4cm] object-contain transition-all"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
-                    <img loading="lazy" src="SAAS.png" alt="SAAS" class="w-[8cm] h-[4cm] object-contain transition-all"
+                    <img loading="lazy" src="SAAS.png" alt="SAAS"
+                        class="w-[6cm] h-[3cm] md:w-[8cm] md:h-[4cm] object-contain transition-all"
                         onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
                 </div>
             </div>
@@ -863,7 +879,8 @@
                     <span
                         class="bg-brand-purple/10 text-brand-purple px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] mb-4 inline-block border border-brand-purple/20">Impacto
                         Real</span>
-                    <h2 class="font-heading text-3xl sm:text-5xl font-bold text-brand-dark mb-4">Evidencia Institucional
+                    <h2 class="font-heading text-3xl sm:text-5xl font-bold text-brand-dark mb-4 leading-tight">Evidencia
+                        Institucional
                     </h2>
                     <p class="text-gray-600 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
                         Intervenciones reales con resultados medibles que transformaron la operación de gobiernos y
@@ -937,14 +954,16 @@
                                 <div class="pb-2">
                                     <p class="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-2">
                                         Resultado</p>
-                                    <div class="flex gap-6">
+                                    <div class="flex gap-4 sm:gap-6">
                                         <div class="text-center">
-                                            <p class="text-2xl font-heading font-bold text-brand-dark">-42%</p>
+                                            <p class="text-xl sm:text-2xl font-heading font-bold text-brand-dark">-42%
+                                            </p>
                                             <p class="text-[9px] text-gray-500 uppercase tracking-wider">Tiempos</p>
                                         </div>
                                         <div class="w-px bg-gray-200"></div>
                                         <div class="text-center">
-                                            <p class="text-2xl font-heading font-bold text-brand-dark">100%</p>
+                                            <p class="text-xl sm:text-2xl font-heading font-bold text-brand-dark">100%
+                                            </p>
                                             <p class="text-[9px] text-gray-500 uppercase tracking-wider">Trazables</p>
                                         </div>
                                     </div>
@@ -1042,14 +1061,15 @@
                                 <div class="pb-2">
                                     <p class="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-2">
                                         Resultado</p>
-                                    <div class="flex gap-6">
+                                    <div class="flex gap-4 sm:gap-6">
                                         <div class="text-center">
-                                            <p class="text-2xl font-heading font-bold text-brand-dark">+28pts</p>
+                                            <p class="text-xl sm:text-2xl font-heading font-bold text-brand-dark">+28pts
+                                            </p>
                                             <p class="text-[9px] text-gray-500 uppercase tracking-wider">CSAT</p>
                                         </div>
                                         <div class="w-px bg-gray-200"></div>
                                         <div class="text-center">
-                                            <p class="text-2xl font-heading font-bold text-brand-dark">5</p>
+                                            <p class="text-xl sm:text-2xl font-heading font-bold text-brand-dark">5</p>
                                             <p class="text-[9px] text-gray-500 uppercase tracking-wider">Nodos Std.</p>
                                         </div>
                                     </div>
@@ -2082,11 +2102,15 @@
         });
 
         // Lógica Navbar y Menú
+        function closeMobileMenu() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
         document.getElementById('mobile-menu-btn').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
         document.querySelectorAll('#mobile-menu a, #mobile-menu button').forEach(el => {
-            el.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+            el.addEventListener('click', () => closeMobileMenu());
         });
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
@@ -2541,7 +2565,7 @@
                 <!-- Dashboard de Donuts por Dimensión -->
                 <div class="space-y-3">
                     <h6 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Puntaje por Dimensión</h6>
-                    <div id="res-donuts" class="grid grid-cols-3 gap-3">
+                    <div id="res-donuts" class="grid grid-cols-2 xs:grid-cols-3 gap-3">
                         <!-- Se llena dinámicamente -->
                     </div>
                 </div>
