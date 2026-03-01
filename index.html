@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundación Red Social | Arquitectura Pública Integrada</title>
+    <meta name="description"
+        content="Diseñamos la estructura conceptual, operativa y cultural que permite que los sistemas y equipos de su gobierno funcionen como un solo organismo eficiente y medible.">
+    <meta name="keywords"
+        content="arquitectura publica, gestion publica, innovacion institucional, gobernanza, politicas publicas, whitepapers gestion">
+
+    <!-- Open Graph Tags (OG Tags) -->
+    <meta property="og:title" content="Fundación Red Social | Arquitectura Pública Integrada">
+    <meta property="og:description"
+        content="Transformando la gestión pública a través de un método riguroso, colaborativo y adaptable.">
+    <meta property="og:image" content="social_banner.png">
+    <meta property="og:url" content="https://mdvolino.github.io/red-social/">
+    <meta property="og:type" content="website">
+
+    <!-- Web App Manifest & Icons -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="logo_red_social.png">
+    <link rel="apple-touch-icon" href="logo_red_social.png">
+
+    <!-- Precarga de fuentes -->
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700;800&display=swap"
+        as="style">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Poppins e Inter -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Configuración de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            purple: '#8A2B88',
+                            magenta: '#E6217E',
+                            orange: '#F99D1C',
+                            yellow: '#F4D03F',
+                            dark: '#110711',
+                            light: '#FAFAFA',
+                        }
+                    },
+                    animation: {
+                        'infinite-scroll': 'scroll 60s linear infinite',
+                    },
+                    keyframes: {
+                        scroll: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(calc(-50% - 1rem))' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Scroll Reveal Effect (Intersection Observer) */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.5, 0, 0, 1), transform 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Acordeón Verticales */
+        .accordion-content {
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .accordion-content.open {
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        /* Efecto Carrusel Logos */
+        .scroller-mask {
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        /* Glassmorphism Portal */
+        .glass-panel-dark {
+            background: rgba(17, 7, 17, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased bg-white relative">
+
+    <!-- CONTENEDOR PRINCIPAL DE LA WEB (Se oculta al entrar al portal) -->
+    <div id="main-website" class="transition-opacity duration-500">
+
+        <!-- 1. HEADER ESTRATÉGICO -->
+        <header
+            class="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50 transition-all duration-300 border-b border-gray-100"
+            id="navbar">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20 gap-4">
+
+                    <!-- Logotipo Limpio -->
+                    <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                        <div
+                            class="flex flex-col leading-none font-heading font-bold text-2xl tracking-tight text-brand-dark">
+                            Red Social
+                            <span
+                                class="text-[9px] font-sans font-bold tracking-[0.2em] text-brand-purple mt-1 uppercase">Fundación</span>
+                        </div>
+                        <div class="flex items-end h-7 ml-2 opacity-90">
+                            <div
+                                class="w-2.5 h-7 bg-brand-purple rounded-t-sm rounded-bl-sm transform -rotate-12 origin-bottom">
+                            </div>
+                            <div
+                                class="w-2.5 h-9 bg-brand-magenta rounded-t-sm rounded-b-sm transform -rotate-6 origin-bottom -ml-0.5">
+                            </div>
+                            <div
+                                class="w-2.5 h-7 bg-brand-yellow rounded-t-sm rounded-br-sm transform rotate-6 origin-bottom -ml-0.5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menú Desktop -->
+                    <nav class="hidden lg:flex space-x-6 xl:space-x-8 text-sm">
+                        <a href="#metodo"
+                            class="text-gray-600 hover:text-brand-purple font-medium transition-colors whitespace-nowrap">Marco
+                            Metodológico</a>
+                        <a href="whitepapers.html"
+                            class="text-brand-magenta hover:text-brand-purple font-bold transition-colors whitespace-nowrap flex items-center gap-1"><i
+                                class="ph-bold ph-newspaper"></i> Documentos Técnicos</a>
+                        <a href="#casos"
+                            class="text-gray-600 hover:text-brand-purple font-medium transition-colors whitespace-nowrap">Evidencia</a>
+                        <a href="#equipo"
+                            class="text-gray-600 hover:text-brand-purple font-medium transition-colors whitespace-nowrap">Equipo</a>
+                        <button onclick="openPortalLogin()"
+                            class="text-brand-purple font-bold hover:text-brand-dark transition-colors whitespace-nowrap flex items-center gap-1.5"><i
+                                class="ph-bold ph-lock-key"></i> Portal</button>
+                    </nav>
+
+                    <!-- Botones Desktop -->
+                    <div class="hidden lg:flex flex-shrink-0 gap-3">
+                        <a href="#contacto"
+                            class="bg-brand-dark hover:bg-black text-white font-medium py-2 px-5 rounded-lg transition-colors text-sm">
+                            Evaluación Técnica
+                        </a>
+                    </div>
+
+                    <!-- Botón Menú Móvil -->
+                    <div class="lg:hidden flex items-center">
+                        <button id="mobile-menu-btn" class="text-brand-dark focus:outline-none">
+                            <i class="ph ph-list text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menú Móvil Desplegable -->
+            <div id="mobile-menu"
+                class="hidden lg:hidden bg-white border-t border-gray-100 absolute w-full top-20 left-0 shadow-lg z-40">
+                <div class="px-4 py-4 space-y-2 font-medium text-sm">
+                    <a href="#mirada" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">API Humana</a>
+                    <a href="#verticales"
+                        class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">Verticales</a>
+                    <a href="#metodo" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">Marco
+                        Metodológico</a>
+                    <a href="#casos" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">Evidencia y
+                        Casos</a>
+                    <a href="whitepapers.html"
+                        class="block px-3 py-2 text-brand-magenta font-bold hover:bg-gray-50 rounded-md">Documentos
+                        Técnicos</a>
+                    <a href="#equipo" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">Equipo</a>
+                    <button onclick="openPortalLogin()"
+                        class="block w-full text-left px-3 py-2 text-brand-purple font-bold hover:bg-gray-50 rounded-md flex items-center gap-2"><i
+                            class="ph-bold ph-lock-key"></i> Acceso Portal</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. HERO SECTION (Tesis Estructural) -->
+        <section id="hero" class="relative pt-32 pb-24 flex items-center min-h-[90vh] bg-brand-dark overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+                    alt="Gestión pública estructural" class="w-full h-full object-cover opacity-20 grayscale" />
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/95 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="max-w-3xl">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-1 bg-brand-magenta"></div>
+                        <span class="text-brand-magenta font-bold text-xs uppercase tracking-[0.2em]">Integración &
+                            Gobernanza</span>
+                    </div>
+                    <h1
+                        class="font-heading text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-[1.1] mb-6 tracking-tight">
+                        Diseñamos arquitectura pública <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-brand-orange">que
+                            integra lo que ya existe.</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-300 mb-10 leading-relaxed font-light">
+                        No desarrollamos software propio. Diseñamos la estructura conceptual, operativa y cultural que
+                        permite que los sistemas, áreas y equipos de su gobierno funcionen como un solo organismo.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#mirada"
+                            class="bg-white hover:bg-gray-100 text-brand-dark font-medium py-3.5 px-8 rounded-lg transition-colors text-center shadow-lg border border-white">
+                            Entender el Método
+                        </a>
+                        <button onclick="window.location.href='whitepapers.html'"
+                            class="bg-transparent hover:bg-white/5 text-white font-medium py-3.5 px-8 rounded-lg transition-colors text-center border border-white/20 flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-books"></i> Serie Documentos Técnicos (DT)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. NUESTRA MIRADA & API HUMANA -->
+        <section id="mirada" class="py-24 bg-white border-b border-gray-100 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-1/3 h-full bg-brand-light transform -skew-x-12 opacity-50 z-0"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16">
+                    <div>
+                        <span
+                            class="text-brand-purple font-bold text-xs uppercase tracking-widest mb-2 block">Diferenciación
+                            Estructural</span>
+                        <h2 class="font-heading text-4xl sm:text-5xl font-bold text-brand-dark mb-6 leading-tight">Somos
+                            una <br><span class="text-brand-magenta">API Humana.</span></h2>
+                        <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                            Así como una API tecnológica permite que distintos softwares dialoguen entre sí sin
+                            fricción, nosotros diseñamos el protocolo humano, organizacional y metodológico que permite
+                            que las instituciones funcionen integradas.
+                        </p>
+                        <div class="border-l-4 border-brand-purple pl-4 mt-8">
+                            <p class="font-bold text-brand-dark text-lg">Misión</p>
+                            <p class="text-gray-500 text-sm mb-4">Impulsar la transformación de la gestión pública y
+                                organizacional a través de un método riguroso, colaborativo y adaptable para construir
+                                organizaciones más inteligentes.</p>
+                            <p class="font-bold text-brand-dark text-lg">Visión</p>
+                            <p class="text-gray-500 text-sm">Ser referentes en la modernización de procesos en Argentina
+                                y la región, combinando evidencia, cercanía y resultados tangibles.</p>
+                        </div>
+                    </div>
+
+                    <div class="reveal-up bg-gray-50 p-8 sm:p-10 rounded-2xl border border-gray-200 shadow-inner">
+                        <h3 class="font-heading text-xl font-bold text-brand-dark mb-6">Valor Diferencial</h3>
+                        <ul class="space-y-4 text-sm text-gray-700">
+                            <li class="flex items-start gap-3">
+                                <i class="ph-fill ph-check-circle text-brand-purple text-xl shrink-0 mt-0.5"></i>
+                                <span><strong>Equipo interdisciplinario:</strong> Perfiles de diseño, comunicación,
+                                    ciencia política, economía y sociología para un abordaje integral.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="ph-fill ph-check-circle text-brand-purple text-xl shrink-0 mt-0.5"></i>
+                                <span><strong>Equilibrio estratégico:</strong> Dialéctica entre lo político, lo
+                                    organizacional y lo técnico para soluciones viables.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="ph-fill ph-check-circle text-brand-purple text-xl shrink-0 mt-0.5"></i>
+                                <span><strong>Experiencia en gestión:</strong> Resultados comprobados en gobiernos y
+                                    organizaciones de alta escala.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="ph-fill ph-check-circle text-brand-purple text-xl shrink-0 mt-0.5"></i>
+                                <span><strong>Conocimiento del territorio:</strong> Mapeo de actores y articulación para
+                                    responder a necesidades reales.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="ph-fill ph-check-circle text-brand-purple text-xl shrink-0 mt-0.5"></i>
+                                <span><strong>Método validado:</strong> Escucha activa y planificación estratégica con
+                                    resultados replicables.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="ph-fill ph-check-circle text-brand-purple text-xl shrink-0 mt-0.5"></i>
+                                <span><strong>Impacto Humano:</strong> Dejamos capacidad instalada para que los cambios
+                                    sean sostenibles en el tiempo.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 4. QUIÉNES SOMOS Y EQUIPO -->
+        <section id="equipo" class="py-24 bg-brand-light border-b border-brand-purple/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="text-center mb-16 relative">
+                    <h2 class="font-heading text-4xl sm:text-5xl font-bold text-brand-purple tracking-tight uppercase">
+                        Quiénes Somos</h2>
+                    <div class="w-16 h-1 bg-brand-magenta mx-auto mt-4"></div>
+                </div>
+
+                <!-- Grilla del Equipo -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-14 mb-16 max-w-5xl mx-auto">
+                    <div class="flex flex-col items-center text-center cursor-pointer group"
+                        onclick="openProfile('Laura Melgarejo', 'Coordinadora', 'Ing. en Telecomunicaciones', 'Experta en telecomunicaciones y planificación de infraestructura. Dirige las estrategias de implementación técnica en territorios complejos, asegurando conectividad y eficiencia.', 'https://ui-avatars.com/api/?name=Laura+Melgarejo&background=E6217E&color=fff&size=200')">
+                        <img loading="lazy"
+                            src="https://ui-avatars.com/api/?name=Laura+Melgarejo&background=E6217E&color=fff&size=150"
+                            alt="Laura Melgarejo"
+                            class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 shadow-md group-hover:scale-105 transition-transform border-4 border-white group-hover:border-brand-magenta">
+                        <h4
+                            class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-magenta transition-colors">
+                            Laura Melgarejo</h4>
+                        <p class="text-[10px] sm:text-xs text-brand-orange mt-1 font-semibold uppercase tracking-wider">
+                            Coordinadora</p>
+                    </div>
+
+                    <div class="flex flex-col items-center text-center cursor-pointer group"
+                        onclick="openProfile('Lihuen Bezzo', 'Coordinadora', 'Diseñadora Industrial', 'Especialista en Design Thinking y diseño centrado en el usuario. Coordina el rediseño de procesos y flujos de atención ciudadana para maximizar la usabilidad.', 'https://ui-avatars.com/api/?name=Lihuen+Bezzo&background=8A2B88&color=fff&size=200')">
+                        <img loading="lazy"
+                            src="https://ui-avatars.com/api/?name=Lihuen+Bezzo&background=8A2B88&color=fff&size=150"
+                            alt="Lihuen Bezzo"
+                            class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 shadow-md group-hover:scale-105 transition-transform border-4 border-white group-hover:border-brand-purple">
+                        <h4
+                            class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-purple transition-colors">
+                            Lihuen Bezzo</h4>
+                        <p class="text-[10px] sm:text-xs text-brand-orange mt-1 font-semibold uppercase tracking-wider">
+                            Coordinadora</p>
+                    </div>
+
+                    <div class="flex flex-col items-center text-center cursor-pointer group"
+                        onclick="openProfile('Victoria Bohl', 'Consultora', 'Lic. Ciencia política', 'Especializada en gobernanza y análisis de políticas públicas. Aporta el marco teórico y analítico necesario para la toma de decisiones basada en datos.', 'https://ui-avatars.com/api/?name=Victoria+Bohl&background=F99D1C&color=fff&size=200')">
+                        <img loading="lazy"
+                            src="https://ui-avatars.com/api/?name=Victoria+Bohl&background=F99D1C&color=fff&size=150"
+                            alt="Victoria Bohl"
+                            class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 shadow-md group-hover:scale-105 transition-transform border-4 border-white group-hover:border-brand-orange">
+                        <h4
+                            class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-orange transition-colors">
+                            Victoria Bohl</h4>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-1 uppercase tracking-wider">Lic. Ciencia
+                            Política</p>
+                    </div>
+
+                    <div class="flex flex-col items-center text-center cursor-pointer group"
+                        onclick="openProfile('Abril Manessi', 'Consultora', 'Lic. Relaciones Internacionales', 'Gestiona los vínculos institucionales y la cooperación. Su rol es clave para la escalabilidad y financiamiento de los proyectos.', 'https://ui-avatars.com/api/?name=Abril+Manessi&background=F4D03F&color=2A1029&size=200')">
+                        <img loading="lazy"
+                            src="https://ui-avatars.com/api/?name=Abril+Manessi&background=F4D03F&color=2A1029&size=150"
+                            alt="Abril Manessi"
+                            class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 shadow-md group-hover:scale-105 transition-transform border-4 border-white group-hover:border-brand-yellow">
+                        <h4
+                            class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-yellow transition-colors">
+                            Abril Manessi</h4>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-1 uppercase tracking-wider">Lic. Relaciones
+                            Int.</p>
+                    </div>
+
+                    <div class="flex flex-col items-center text-center cursor-pointer group"
+                        onclick="openProfile('Delfina Gonzalez Rey', 'Analista', 'Lic. Ciencia Política', 'Analista de datos y evaluación de impacto. Encargada de monitorear las métricas de éxito (KPIs) de las implementaciones territoriales.', 'https://ui-avatars.com/api/?name=Delfina+Gonzalez&background=E6217E&color=fff&size=200')">
+                        <img loading="lazy"
+                            src="https://ui-avatars.com/api/?name=Delfina+Gonzalez&background=E6217E&color=fff&size=150"
+                            alt="Delfina Gonzalez Rey"
+                            class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 shadow-md group-hover:scale-105 transition-transform border-4 border-white group-hover:border-brand-magenta">
+                        <h4
+                            class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-magenta transition-colors">
+                            Delfina Gonzalez</h4>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-1 uppercase tracking-wider">Lic. Ciencia
+                            Política</p>
+                    </div>
+
+                    <div class="flex flex-col items-center text-center cursor-pointer group"
+                        onclick="openProfile('Belen Silva', 'Consultora de Cultura', 'Lic. Psicología | Tec. Sup. en RRPP', 'Lidera el desarrollo de habilidades blandas y el diagnóstico de clima cultural. Aporta su visión en psicología organizacional.', 'https://ui-avatars.com/api/?name=Belen+Silva&background=8A2B88&color=fff&size=200')">
+                        <img loading="lazy"
+                            src="https://ui-avatars.com/api/?name=Belen+Silva&background=8A2B88&color=fff&size=150"
+                            alt="Belen Silva"
+                            class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 shadow-md group-hover:scale-105 transition-transform border-4 border-white group-hover:border-brand-purple">
+                        <h4
+                            class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-purple transition-colors">
+                            Belen Silva</h4>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-1 uppercase tracking-wider">Lic. Psicología
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col items-center text-center cursor-pointer group"
+                        onclick="openProfile('Debora Irigo', 'Consultora de Identidad', 'Lic. en RRPP y Marketing', 'Estratega de comunicación e identidad. Diseña campañas de sensibilización ciudadana y comunicación interna para la gestión del cambio.', 'https://ui-avatars.com/api/?name=Debora+Irigo&background=F99D1C&color=fff&size=200')">
+                        <img loading="lazy"
+                            src="https://ui-avatars.com/api/?name=Debora+Irigo&background=F99D1C&color=fff&size=150"
+                            alt="Debora Irigo"
+                            class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 shadow-md group-hover:scale-105 transition-transform border-4 border-white group-hover:border-brand-orange">
+                        <h4
+                            class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-orange transition-colors">
+                            Debora Irigo</h4>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-1 uppercase tracking-wider">Lic. en RRPP</p>
+                    </div>
+
+                    <div class="flex flex-col items-center text-center cursor-pointer group"
+                        onclick="openProfile('Giuliano Donnes', 'Analista Financiero', 'Lic. Economia', 'Especialista en presupuestos y evaluación financiera de proyectos de innovación pública. Asegura la viabilidad económica de las soluciones.', 'https://ui-avatars.com/api/?name=Giuliano+Donnes&background=2A1029&color=fff&size=200')">
+                        <img loading="lazy"
+                            src="https://ui-avatars.com/api/?name=Giuliano+Donnes&background=110711&color=fff&size=150"
+                            alt="Giuliano Donnes"
+                            class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 shadow-md group-hover:scale-105 transition-transform border-4 border-white group-hover:border-brand-dark">
+                        <h4
+                            class="font-bold text-brand-dark text-sm leading-tight group-hover:text-brand-dark transition-colors">
+                            Giuliano Donnes</h4>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-1 uppercase tracking-wider">Lic. Economía</p>
+
+                    </div>
+                </div>
+
+                <!-- Frase Central Cuidada -->
+                <div class="text-center max-w-4xl mx-auto px-4 mt-4 relative flex flex-col items-center">
+                    <i class="ph-fill ph-quotes text-5xl text-[#F5D0E1] mb-2"></i>
+                    <p class="font-heading text-xl sm:text-2xl text-brand-dark leading-relaxed italic">
+                        "Somos un <span class="text-brand-purple font-bold">equipo interdisciplinario</span> que <span
+                            class="text-brand-magenta font-bold">transforma datos en decisiones</span>.
+                        Diseñamos, analizamos e implementamos políticas públicas <span
+                            class="text-brand-purple font-bold">que generan impacto real.</span>"
+                    </p>
+                </div>
+
+                <!-- Asesores Ad Honorem -->
+                <div class="border-t border-brand-purple/10 pt-16 mt-20 text-center">
+                    <h3 class="font-heading text-2xl font-bold text-brand-purple mb-4">Comité de Asesores
+                        Institucionales</h3>
+                    <p class="text-gray-600 text-sm max-w-2xl mx-auto mb-10">Agradecemos profundamente a la red de
+                        profesionales y especialistas que donan su tiempo, conocimiento y experiencia de forma "ad
+                        honorem" para potenciar el impacto de nuestra arquitectura pública.</p>
+
+                    <div class="flex flex-wrap justify-center gap-6 sm:gap-10 max-w-4xl mx-auto">
+                        <div class="flex flex-col items-center cursor-pointer group"
+                            onclick="openProfile('Facundo Carrillo', 'Asesor Institucional', '', 'Asesor estratégico ad honorem aportando experiencia en despliegues institucionales.', 'https://ui-avatars.com/api/?name=Facundo+Carrillo&background=f3f4f6&color=6b7280&size=150')">
+                            <img loading="lazy"
+                                src="https://ui-avatars.com/api/?name=Facundo+Carrillo&background=f3f4f6&color=6b7280&size=150"
+                                alt="Facundo Carrillo"
+                                class="w-16 h-16 rounded-full mb-3 grayscale border border-gray-200 group-hover:grayscale-0 group-hover:border-brand-purple transition-all">
+                            <h4
+                                class="font-bold text-brand-dark text-xs group-hover:text-brand-purple transition-colors">
+                                Facundo Carrillo</h4>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer group"
+                            onclick="openProfile('Ernesto Bruggia', 'Asesor Tecnológico', '', 'Especialista en arquitectura de sistemas, donando su expertise en infraestructura digital.', 'https://ui-avatars.com/api/?name=Ernesto+Bruggia&background=f3f4f6&color=6b7280&size=150')">
+                            <img loading="lazy"
+                                src="https://ui-avatars.com/api/?name=Ernesto+Bruggia&background=f3f4f6&color=6b7280&size=150"
+                                alt="Ernesto Bruggia"
+                                class="w-16 h-16 rounded-full mb-3 grayscale border border-gray-200 group-hover:grayscale-0 group-hover:border-brand-purple transition-all">
+                            <h4
+                                class="font-bold text-brand-dark text-xs group-hover:text-brand-purple transition-colors">
+                                Ernesto Bruggia</h4>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer group"
+                            onclick="openProfile('Mariano Volino', 'Líder de Proyecto', 'Lic. Comunicación', 'Líder de proyectos estratégicos y especialista en comunicación organizacional.', 'https://ui-avatars.com/api/?name=Mariano+Volino&background=f3f4f6&color=6b7280&size=150')">
+                            <img loading="lazy"
+                                src="https://ui-avatars.com/api/?name=Mariano+Volino&background=f3f4f6&color=6b7280&size=150"
+                                alt="Mariano Volino"
+                                class="w-16 h-16 rounded-full mb-3 grayscale border border-gray-200 group-hover:grayscale-0 group-hover:border-brand-purple transition-all">
+                            <h4
+                                class="font-bold text-brand-dark text-xs group-hover:text-brand-purple transition-colors">
+                                Mariano Volino</h4>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer group"
+                            onclick="openProfile('Daigana Salgado', 'Asesora de CX', '', 'Referente en diseño de experiencia ciudadana y usabilidad de servicios públicos.', 'https://ui-avatars.com/api/?name=Daigana+Salgado&background=f3f4f6&color=6b7280&size=150')">
+                            <img loading="lazy"
+                                src="https://ui-avatars.com/api/?name=Daigana+Salgado&background=f3f4f6&color=6b7280&size=150"
+                                alt="Daigana Salgado"
+                                class="w-16 h-16 rounded-full mb-3 grayscale border border-gray-200 group-hover:grayscale-0 group-hover:border-brand-purple transition-all">
+                            <h4
+                                class="font-bold text-brand-dark text-xs group-hover:text-brand-purple transition-colors">
+                                Daigana Salgado</h4>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer group"
+                            onclick="openProfile('Mariela Gallo', 'Asesora Legal', '', 'Abogada especialista en normativas públicas y compliance institucional.', 'https://ui-avatars.com/api/?name=Mariela+Gallo&background=f3f4f6&color=6b7280&size=150')">
+                            <img loading="lazy"
+                                src="https://ui-avatars.com/api/?name=Mariela+Gallo&background=f3f4f6&color=6b7280&size=150"
+                                alt="Mariela Gallo"
+                                class="w-16 h-16 rounded-full mb-3 grayscale border border-gray-200 group-hover:grayscale-0 group-hover:border-brand-purple transition-all">
+                            <h4
+                                class="font-bold text-brand-dark text-xs group-hover:text-brand-purple transition-colors">
+                                Mariela Gallo</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. VERTICALES (Pequeñas y Desplegables) -->
+        <section id="verticales" class="py-20 bg-white relative border-b border-gray-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-brand-purple tracking-tight uppercase">
+                        Verticales de Acción</h2>
+                    <div class="w-16 h-1 bg-brand-magenta mx-auto mt-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8 relative">
+                    <div
+                        class="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-gray-200 transform -translate-x-1/2">
+                    </div>
+
+                    <!-- Innovación -->
+                    <div class="reveal-up flex flex-col items-center text-center p-4 cursor-pointer group"
+                        onclick="toggleVertical(this)">
+                        <div
+                            class="w-20 h-20 rounded-full border-[3px] border-brand-purple flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-brand-purple group-hover:scale-105 shadow-sm">
+                            <i
+                                class="ph-duotone ph-rocket text-4xl text-brand-purple group-hover:text-white transition-colors"></i>
+                        </div>
+                        <h3 class="font-heading text-base font-bold text-brand-dark flex items-center gap-2">
+                            Innovación y optimización <i
+                                class="ph-bold ph-caret-down text-brand-purple text-sm transition-transform duration-300 icon-arrow"></i>
+                        </h3>
+                        <div class="accordion-content text-sm text-gray-600 mt-2 max-w-sm px-4">
+                            Implementamos tecnología para digitalizar trámites, reduciendo cuellos de botella y
+                            mejorando drásticamente el tiempo de respuesta al ciudadano sin descartar sus sistemas base.
+                        </div>
+                    </div>
+
+                    <!-- Gestión -->
+                    <div class="reveal-up flex flex-col items-center text-center p-4 cursor-pointer group"
+                        onclick="toggleVertical(this)">
+                        <div
+                            class="w-20 h-20 rounded-full border-[3px] border-brand-magenta flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-brand-magenta group-hover:scale-105 shadow-sm">
+                            <i
+                                class="ph-duotone ph-target text-4xl text-brand-magenta group-hover:text-white transition-colors"></i>
+                        </div>
+                        <h3 class="font-heading text-base font-bold text-brand-dark flex items-center gap-2">
+                            Gestión de proyectos <i
+                                class="ph-bold ph-caret-down text-brand-magenta text-sm transition-transform duration-300 icon-arrow"></i>
+                        </h3>
+                        <div class="accordion-content text-sm text-gray-600 mt-2 max-w-sm px-4">
+                            Trazamos hojas de ruta claras para políticas públicas, asegurando la viabilidad, el
+                            financiamiento y la medición de impacto en cada etapa de la ejecución institucional.
+                        </div>
+                    </div>
+
+                    <!-- Capacitaciones -->
+                    <div class="reveal-up flex flex-col items-center text-center p-4 cursor-pointer group"
+                        onclick="toggleVertical(this)">
+                        <div
+                            class="w-20 h-20 rounded-full border-[3px] border-brand-orange flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-brand-orange group-hover:scale-105 shadow-sm">
+                            <i
+                                class="ph-duotone ph-chalkboard-teacher text-4xl text-brand-orange group-hover:text-white transition-colors"></i>
+                        </div>
+                        <h3 class="font-heading text-base font-bold text-brand-dark flex items-center gap-2">
+                            Capacitaciones y formación <i
+                                class="ph-bold ph-caret-down text-brand-orange text-sm transition-transform duration-300 icon-arrow"></i>
+                        </h3>
+                        <div class="accordion-content text-sm text-gray-600 mt-2 max-w-sm px-4">
+                            Programas de formación continua enfocados en habilidades blandas (empatía, resolución de
+                            conflictos) y técnicas (uso de herramientas de control) para el capital humano del Estado.
+                        </div>
+                    </div>
+
+                    <!-- Investigaciones -->
+                    <div class="reveal-up flex flex-col items-center text-center p-4 cursor-pointer group"
+                        onclick="toggleVertical(this)">
+                        <div
+                            class="w-20 h-20 rounded-full border-[3px] border-brand-yellow flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-brand-yellow group-hover:scale-105 shadow-sm">
+                            <i
+                                class="ph-duotone ph-microscope text-4xl text-brand-yellow group-hover:text-white transition-colors"></i>
+                        </div>
+                        <h3 class="font-heading text-base font-bold text-brand-dark flex items-center gap-2">
+                            Investigaciones y papers <i
+                                class="ph-bold ph-caret-down text-brand-yellow text-sm transition-transform duration-300 icon-arrow"></i>
+                        </h3>
+                        <div class="accordion-content text-sm text-gray-600 mt-2 max-w-sm px-4">
+                            Generación de conocimiento empírico y metodológico. Producimos informes y métricas que
+                            sirven de base teórica para diseñar políticas de estado escalables a nivel regional.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. SECTORES DE IMPACTO (Nuevo de Dossier PPTX) -->
+        <section id="sectores" class="py-20 bg-brand-dark text-white relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold tracking-tight uppercase">Sectores de Impacto
+                    </h2>
+                    <div class="w-16 h-1 bg-brand-yellow mx-auto mt-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Sector Público -->
+                    <div
+                        class="reveal-up p-8 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-4 mb-6">
+                            <i class="ph-duotone ph-bank text-4xl text-brand-yellow"></i>
+                            <h3 class="font-heading text-xl font-bold">Sector Público</h3>
+                        </div>
+                        <ul class="text-sm text-gray-400 space-y-3">
+                            <li>• Municipios y Gobiernos Provinciales</li>
+                            <li>• Empresas Estatales y Entes Descentralizados</li>
+                            <li>• Poder Judicial y Legislativo</li>
+                            <li>• Salud Pública y Educación</li>
+                        </ul>
+                    </div>
+                    <!-- Sector Privado -->
+                    <div
+                        class="reveal-up p-8 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-4 mb-6">
+                            <i class="ph-duotone ph-buildings text-4xl text-brand-orange"></i>
+                            <h3 class="font-heading text-xl font-bold">Sector Privado</h3>
+                        </div>
+                        <ul class="text-sm text-gray-400 space-y-3">
+                            <li>• Utilities (Energía, Agua, Gas)</li>
+                            <li>• Bancos, Fintechs y Seguros</li>
+                            <li>• Retail, Logística y Transporte</li>
+                            <li>• Salud y Clínicas Privadas</li>
+                        </ul>
+                    </div>
+                    <!-- Organismos Intermedios -->
+                    <div
+                        class="reveal-up p-8 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-4 mb-6">
+                            <i class="ph-duotone ph-users-three text-4xl text-brand-magenta"></i>
+                            <h3 class="font-heading text-xl font-bold">Organismos</h3>
+                        </div>
+                        <ul class="text-sm text-gray-400 space-y-3">
+                            <li>• ONGs y Fundaciones Internacionales</li>
+                            <li>• Cámaras Empresariales y Sindicatos</li>
+                            <li>• Universidades y Centros de Investigación</li>
+                            <li>• Parques Tecnológicos y Labs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. MARCO METODOLÓGICO (Ex Plataforma Front/Back) -->
+        <section id="metodo" class="py-24 bg-brand-light relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 max-w-3xl mx-auto">
+                    <span class="text-brand-magenta font-bold text-xs uppercase tracking-widest">Enfoque de
+                        Integración</span>
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-brand-dark mt-2 mb-4">Marco Metodológico
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed">Las 3 fases de nuestra intervención para convertir
+                        burocracias aisladas en ecosistemas de gestión inteligentes y centralizados.</p>
+                </div>
+
+                <!-- Grilla de 5 módulos compactos -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div
+                        class="reveal-up bg-white p-8 rounded-xl border-t-4 border-brand-purple shadow-sm hover:shadow-md transition-shadow">
+                        <i class="ph-duotone ph-magnifying-glass text-4xl text-brand-purple mb-5"></i>
+                        <h3 class="font-bold text-brand-dark text-lg mb-4">Investigación y Diagnóstico</h3>
+                        <ul class="text-xs text-gray-500 space-y-2 leading-relaxed">
+                            <li>• Relevamos procesos, prácticas y experiencias reales.</li>
+                            <li>• Mapeamos actores, áreas de influencia y puntos críticos.</li>
+                            <li>• Analizamos normativa, documentación e infraestructura.</li>
+                            <li>• Recogemos evidencias mediante encuestas y observación directa.</li>
+                        </ul>
+                    </div>
+
+                    <div
+                        class="reveal-up bg-white p-8 rounded-xl border-t-4 border-brand-magenta shadow-sm hover:shadow-md transition-shadow">
+                        <i class="ph-duotone ph-arrows-merge text-4xl text-brand-magenta mb-5"></i>
+                        <h3 class="font-bold text-brand-dark text-lg mb-4">Diseño y Co-Creación</h3>
+                        <ul class="text-xs text-gray-500 space-y-2 leading-relaxed">
+                            <li>• Co-creamos propuestas priorizando impacto y viabilidad.</li>
+                            <li>• Trazamos journeys y flujos de trabajo optimizados.</li>
+                            <li>• Definimos estructuras, roles y dotaciones funcionales.</li>
+                            <li>• Diseñamos indicadores y tableros para el seguimiento (BI).</li>
+                        </ul>
+                    </div>
+
+                    <div
+                        class="reveal-up bg-white p-8 rounded-xl border-t-4 border-brand-orange shadow-sm hover:shadow-md transition-shadow">
+                        <i class="ph-duotone ph-chart-line-up text-4xl text-brand-orange mb-5"></i>
+                        <h3 class="font-bold text-brand-dark text-lg mb-4">Ejecución y Despliegue</h3>
+                        <ul class="text-xs text-gray-500 space-y-2 leading-relaxed">
+                            <li>• Ejecutamos planes con enfoque ágil y orientado a resultados.</li>
+                            <li>• Activamos procesos y sistemas clave para la transformación.</li>
+                            <li>• Acompañamos el cambio cultural y la adopción de nuevas formas.</li>
+                            <li>• Ajustamos estrategias en tiempo real para maximizar impacto.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. ALIANZAS (Carrusel Infinito) -->
+        <section class="py-10 bg-white border-y border-gray-200 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 mb-6">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center">Implementaciones
+                    consolidadas e infraestructura junto a</h4>
+            </div>
+            <!-- Carrusel CSS -->
+            <div class="w-full scroller-mask">
+                <div
+                    class="flex items-center gap-12 w-max animate-infinite-scroll hover:[animation-play-state:paused] px-8">
+                    <!-- Set 1 -->
+                    <img loading="lazy" src="CFI.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="Santa FE.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="entre rios.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="chubut.png" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="GCBA.png" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="descarga.png" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="SAAS.png" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+
+                    <!-- Duplicate for infinite effect -->
+                    <img loading="lazy" src="CFI.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="Santa FE.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="entre rios.jpg" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="chubut.png" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="GCBA.png" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="descarga.png" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                    <img loading="lazy" src="SAAS.png" alt="" class="w-32 h-16 object-contain transition-all"
+                        onerror="this.outerHTML='<span class=\'font-bold text-gray-400 border border-gray-200 px-4 py-2 rounded\'></span>'">
+                </div>
+            </div>
+        </section>
+
+        <!-- 7.B HISTÓRICO DE IMPLEMENTACIÓN -->
+        <section id="historico" class="py-20 bg-brand-dark relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5">
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-16">
+                    <span class="text-brand-magenta font-bold text-xs uppercase tracking-widest block mb-2">Impacto
+                        Medible</span>
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white mb-4">Histórico de Implementación
+                    </h2>
+                    <p class="text-gray-400 text-sm max-w-2xl mx-auto">Métricas consolidadas de la eficacia de nuestra
+                        arquitectura pública a nivel regional e integral.</p>
+                </div>
+
+                <div class="grid grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8 text-center" id="counter-section">
+                    <div class="flex flex-col items-center p-4 reveal-up">
+                        <span class="text-4xl sm:text-5xl font-heading font-bold text-brand-yellow mb-2 tracking-tight">
+                            +<span class="counter" data-target="5">0</span>
+                        </span>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Provincias</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 reveal-up" style="transition-delay: 100ms;">
+                        <span class="text-4xl sm:text-5xl font-heading font-bold text-brand-orange mb-2 tracking-tight">
+                            +<span class="counter" data-target="20">0</span>
+                        </span>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Ministerios</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 reveal-up" style="transition-delay: 200ms;">
+                        <span
+                            class="text-4xl sm:text-5xl font-heading font-bold text-brand-magenta mb-2 tracking-tight">
+                            <span class="counter" data-target="4.2" data-decimals="1">0</span>K
+                        </span>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Agentes Cap.</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 reveal-up" style="transition-delay: 300ms;">
+                        <span class="text-4xl sm:text-5xl font-heading font-bold text-brand-purple mb-2 tracking-tight">
+                            <span class="counter" data-target="18" data-decimals="0">0</span>M
+                        </span>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Ciudadanos</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 reveal-up" style="transition-delay: 400ms;">
+                        <span class="text-4xl sm:text-5xl font-heading font-bold text-green-400 mb-2 tracking-tight">
+                            +<span class="counter" data-target="35">0</span>%
+                        </span>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">CSAT Local</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 reveal-up" style="transition-delay: 500ms;">
+                        <span class="text-4xl sm:text-5xl font-heading font-bold text-white mb-2 tracking-tight">
+                            -<span class="counter" data-target="40">0</span>%
+                        </span>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Tiempos de Rta.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. CASOS DE ÉXITO (Diseño Pixel Perfect) -->
+        <section id="casos" class="py-24 bg-gray-50 border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-16">
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-brand-dark mb-2">Evidencia Institucional
+                    </h2>
+                    <p class="text-gray-600 text-sm">Desempeño documentado en intervenciones de escala y entregables
+                        transferidos.</p>
+                </div>
+
+                <!-- Grilla 3 Casos -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Caso 1 -->
+                    <div
+                        class="reveal-up bg-white border border-gray-100 rounded-xl p-8 hover:shadow-xl transition-shadow flex flex-col h-full shadow-sm">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+                            <span
+                                class="bg-[#F5E6F5] text-brand-purple px-3 py-1 rounded text-xs font-bold uppercase tracking-wider">Provincia
+                                de Entre Ríos</span>
+                            <span
+                                class="text-[10px] bg-[#E6F4EA] text-green-700 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Implementado</span>
+                        </div>
+                        <h3 class="font-heading text-2xl font-bold text-brand-dark mb-6 leading-tight">Modernización
+                            Integral de Trámites y Procesos</h3>
+
+                        <div class="space-y-5 mb-6 flex-grow">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">El
+                                    Problema</p>
+                                <p class="text-sm text-gray-600 leading-relaxed">Altos tiempos de resolución (TMA > 45
+                                    días), baja trazabilidad documental y atención fragmentada en silos.</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-brand-purple uppercase tracking-widest mb-1">La
+                                    Intervención</p>
+                                <p class="text-sm text-gray-600 leading-relaxed">Diseño conceptual de la arquitectura de
+                                    flujos y acompañamiento en la implementación de BPM para +800 agentes.</p>
+                            </div>
+                            <div class="bg-gray-50 p-6 rounded-lg border border-gray-100 mt-2">
+                                <p class="text-[10px] font-bold text-brand-magenta uppercase tracking-widest mb-3">
+                                    Resultado Cuantificado</p>
+                                <div class="flex gap-8">
+                                    <div>
+                                        <p class="text-3xl font-heading font-bold text-brand-dark mb-1">-42%</p>
+                                        <p class="text-[10px] text-gray-500 uppercase tracking-wider">Tiempos de espera
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-3xl font-heading font-bold text-brand-dark mb-1">100%</p>
+                                        <p class="text-[10px] text-gray-500 uppercase tracking-wider">Trámites trazables
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-100 pt-6 mt-auto">
+                            <p class="text-[10px] font-bold text-brand-dark uppercase tracking-widest mb-4">Activos
+                                Transferidos</p>
+                            <ul class="text-sm text-gray-600 space-y-3">
+                                <li class="flex items-start gap-3"><i
+                                        class="ph-bold ph-check-circle text-green-500 mt-0.5 text-base"></i>
+                                    <div><strong>Entregables:</strong> Tablero directivo BI, Manual de procesos,
+                                        Protocolo.</div>
+                                </li>
+                                <li class="flex items-start gap-3"><i
+                                        class="ph-bold ph-check-circle text-green-500 mt-0.5 text-base"></i>
+                                    <div><strong>Alcance:</strong> 12 Ministerios, 35 Nodos territoriales,
+                                        Omnicanalidad.</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Caso 2 -->
+                    <div
+                        class="reveal-up bg-white border border-gray-100 rounded-xl p-8 hover:shadow-xl transition-shadow flex flex-col h-full shadow-sm">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+                            <span
+                                class="bg-[#FCE6F0] text-brand-magenta px-3 py-1 rounded text-xs font-bold uppercase tracking-wider">Provincia
+                                de Santa Fe</span>
+                            <span
+                                class="text-[10px] bg-[#FFF8CC] text-[#A67C00] px-3 py-1 rounded-full font-bold uppercase tracking-wider">En
+                                Despliegue</span>
+                        </div>
+                        <h3 class="font-heading text-2xl font-bold text-brand-dark mb-6 leading-tight">Rediseño de la
+                            Experiencia Ciudadana y CX</h3>
+
+                        <div class="space-y-5 mb-6 flex-grow">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">El
+                                    Problema</p>
+                                <p class="text-sm text-gray-600 leading-relaxed">Insatisfacción crítica por fricción en
+                                    puntos de contacto y falta de gobierno de datos unificados para directivos.</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-brand-purple uppercase tracking-widest mb-1">La
+                                    Intervención</p>
+                                <p class="text-sm text-gray-600 leading-relaxed">Mapeo de *Journey* ciudadano y diseño
+                                    de tableros de control analítico sobre ecosistemas existentes.</p>
+                            </div>
+                            <div class="bg-gray-50 p-6 rounded-lg border border-gray-100 mt-2">
+                                <p class="text-[10px] font-bold text-brand-magenta uppercase tracking-widest mb-3">
+                                    Resultado Cuantificado</p>
+                                <div class="flex gap-8">
+                                    <div>
+                                        <p class="text-3xl font-heading font-bold text-brand-dark mb-1">+28 pts</p>
+                                        <p class="text-[10px] text-gray-500 uppercase tracking-wider">Crecimiento CSAT
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-3xl font-heading font-bold text-brand-dark mb-1">5</p>
+                                        <p class="text-[10px] text-gray-500 uppercase tracking-wider">Nodos
+                                            estandarizados</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-100 pt-6 mt-auto">
+                            <p class="text-[10px] font-bold text-brand-dark uppercase tracking-widest mb-4">Activos
+                                Transferidos</p>
+                            <ul class="text-sm text-gray-600 space-y-3">
+                                <li class="flex items-start gap-3"><i
+                                        class="ph-bold ph-check-circle text-green-500 mt-0.5 text-base"></i>
+                                    <div><strong>Entregables:</strong> Matriz de ruteo, Modelo de datos, Glosario de
+                                        KPIs.</div>
+                                </li>
+                                <li class="flex items-start gap-3"><i
+                                        class="ph-bold ph-check-circle text-green-500 mt-0.5 text-base"></i>
+                                    <div><strong>Alcance:</strong> Red de Centros de Participación y Portal Web.</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Caso 3: Entre Ríos con Vos -->
+                    <div
+                        class="reveal-up bg-white border border-gray-100 rounded-xl p-8 hover:shadow-xl transition-shadow flex flex-col h-full shadow-sm">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+                            <span
+                                class="bg-[#EBF5FF] text-blue-600 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider">Programa
+                                Estratégico</span>
+                            <span
+                                class="text-[10px] bg-[#E6F4EA] text-green-700 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Activo</span>
+                        </div>
+                        <h3 class="font-heading text-2xl font-bold text-brand-dark mb-6 leading-tight">Entre Ríos con
+                            Vos</h3>
+                        <div class="space-y-5 mb-6 flex-grow">
+                            <p class="text-sm text-gray-600 leading-relaxed">Dispositivo territorial itinerante diseñado
+                                para acercar los servicios del Estado directamente a los barrios, integrando áreas de
+                                salud, identidad y asesoramiento legal en un solo flujo operativo.</p>
+                            <div class="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                                <p class="text-[10px] font-bold text-brand-purple uppercase tracking-widest mb-3">
+                                    Impacto Social</p>
+                                <p class="text-2xl font-heading font-bold text-brand-dark mb-1">+50 Nodos</p>
+                                <p class="text-[10px] text-gray-500 uppercase tracking-wider">Puntos de atención activos
+                                </p>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-100 pt-6 mt-auto">
+                            <p class="text-[10px] font-bold text-brand-dark uppercase tracking-widest mb-2">Valor
+                                Agregado</p>
+                            <p class="text-xs text-gray-500 italic">"Transformamos la cercanía en un método de gestión
+                                medible y eficiente."</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. THINK TANK EDITORIAL CON FILTROS -->
+        <section id="publicaciones" class="py-24 bg-white border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-12">
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-brand-dark mb-2">Think Tank: Documentos
+                        Técnicos</h2>
+                    <p class="text-gray-600 text-sm">Producción editorial orientada a resolver dilemas de gestión
+                        estructural.</p>
+                </div>
+
+                <!-- Filtros JS -->
+                <div class="flex flex-wrap gap-3 mb-10" id="filter-buttons">
+                    <button
+                        class="filter-btn px-4 py-2 rounded-full bg-brand-dark text-white text-xs font-bold transition-colors"
+                        data-filter="all">Todos</button>
+                    <button
+                        class="filter-btn px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-bold hover:border-brand-purple hover:text-brand-purple transition-colors"
+                        data-filter="arquitectura">Arquitectura Digital</button>
+                    <button
+                        class="filter-btn px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-bold hover:border-brand-purple hover:text-brand-purple transition-colors"
+                        data-filter="cultura">Cultura y Personas</button>
+                    <button
+                        class="filter-btn px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-bold hover:border-brand-purple hover:text-brand-purple transition-colors"
+                        data-filter="datos">IA y Gobernanza</button>
+                    <button
+                        class="filter-btn px-4 py-2 rounded-full border border-gray-300 text-gray-600 text-xs font-bold hover:border-brand-purple hover:text-brand-purple transition-colors"
+                        data-filter="manuales">Manuales y Guías</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="publications-grid">
+                    <!-- DT-01 -->
+                    <div class="pub-card bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-brand-purple hover:shadow-2xl transition-all flex flex-col h-full transform hover:-translate-y-2 group shadow-sm"
+                        data-category="arquitectura">
+                        <div class="p-8 flex flex-col items-start flex-grow">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span
+                                    class="bg-brand-purple text-white text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">DT-01</span>
+                                <span
+                                    class="text-gray-400 text-[8px] font-bold uppercase tracking-widest italic">Arquitectura
+                                    Pública</span>
+                            </div>
+                            <h3
+                                class="font-heading font-bold text-brand-dark text-lg mb-4 leading-tight group-hover:text-brand-purple transition-colors">
+                                Arquitectura Pública Integrada</h3>
+                            <p class="text-gray-600 text-xs line-clamp-3 mb-8 italic">"Del sistema fragmentado a la
+                                gobernanza operativa"</p>
+                            <a href="whitepapers.html#dt01"
+                                class="mt-auto text-white bg-brand-dark px-5 py-3 rounded-lg font-bold text-[10px] flex items-center gap-2 hover:bg-brand-purple transition-all w-full justify-center uppercase tracking-widest">
+                                <i class="ph-bold ph-eyeglasses text-lg"></i> Consultar Documento
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- DT-02 -->
+                    <div class="pub-card bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-brand-magenta hover:shadow-2xl transition-all flex flex-col h-full transform hover:-translate-y-2 group shadow-sm"
+                        data-category="cultura">
+                        <div class="p-8 flex flex-col items-start flex-grow">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span
+                                    class="bg-brand-magenta text-white text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">DT-02</span>
+                                <span
+                                    class="text-gray-400 text-[8px] font-bold uppercase tracking-widest italic">Gobernanza
+                                    & Cultura</span>
+                            </div>
+                            <h3
+                                class="font-heading font-bold text-brand-dark text-lg mb-4 leading-tight group-hover:text-brand-magenta transition-colors">
+                                Cultura de Ejecución</h3>
+                            <p class="text-gray-600 text-xs line-clamp-3 mb-8 italic">"Cómo sostener la transformación
+                                en el sector público"</p>
+                            <a href="whitepapers.html#dt02"
+                                class="mt-auto text-white bg-brand-dark px-5 py-3 rounded-lg font-bold text-[10px] flex items-center gap-2 hover:bg-brand-magenta transition-all w-full justify-center uppercase tracking-widest">
+                                <i class="ph-bold ph-eyeglasses text-lg"></i> Consultar Documento
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- DT-03 -->
+                    <div class="pub-card bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-brand-purple hover:shadow-2xl transition-all flex flex-col h-full transform hover:-translate-y-2 group shadow-sm"
+                        data-category="arquitectura">
+                        <div class="p-8 flex flex-col items-start flex-grow">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span
+                                    class="bg-brand-purple text-white text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">DT-03</span>
+                                <span
+                                    class="text-gray-400 text-[8px] font-bold uppercase tracking-widest italic">Interoperabilidad</span>
+                            </div>
+                            <h3
+                                class="font-heading font-bold text-brand-dark text-lg mb-4 leading-tight group-hover:text-brand-purple transition-colors">
+                                Interoperabilidad Institucional</h3>
+                            <p class="text-gray-600 text-xs line-clamp-3 mb-8 italic">"Cómo integrar sistemas sin
+                                reemplazarlos"</p>
+                            <a href="whitepapers.html#dt03"
+                                class="mt-auto text-white bg-brand-dark px-5 py-3 rounded-lg font-bold text-[10px] flex items-center gap-2 hover:bg-brand-purple transition-all w-full justify-center uppercase tracking-widest">
+                                <i class="ph-bold ph-eyeglasses text-lg"></i> Consultar Documento
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- DT-04 -->
+                    <div class="pub-card bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-brand-orange hover:shadow-2xl transition-all flex flex-col h-full transform hover:-translate-y-2 group shadow-sm"
+                        data-category="datos">
+                        <div class="p-8 flex flex-col items-start flex-grow">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span
+                                    class="bg-brand-orange text-white text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">DT-04</span>
+                                <span
+                                    class="text-gray-400 text-[8px] font-bold uppercase tracking-widest italic">Métricas</span>
+                            </div>
+                            <h3
+                                class="font-heading font-bold text-brand-dark text-lg mb-4 leading-tight group-hover:text-brand-orange transition-colors">
+                                Sistema de Métricas Públicas</h3>
+                            <p class="text-gray-600 text-xs line-clamp-3 mb-8 italic">"Cómo medir gestión sin
+                                burocratizarla"</p>
+                            <a href="whitepapers.html#dt04"
+                                class="mt-auto text-white bg-brand-dark px-5 py-3 rounded-lg font-bold text-[10px] flex items-center gap-2 hover:bg-brand-orange transition-all w-full justify-center uppercase tracking-widest">
+                                <i class="ph-bold ph-eyeglasses text-lg"></i> Consultar Documento
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- DT-05 -->
+                    <div class="pub-card bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-brand-magenta hover:shadow-2xl transition-all flex flex-col h-full transform hover:-translate-y-2 group shadow-sm"
+                        data-category="arquitectura">
+                        <div class="p-8 flex flex-col items-start flex-grow">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span
+                                    class="bg-brand-magenta text-white text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">DT-05</span>
+                                <span
+                                    class="text-gray-400 text-[8px] font-bold uppercase tracking-widest italic">Atención</span>
+                            </div>
+                            <h3
+                                class="font-heading font-bold text-brand-dark text-lg mb-4 leading-tight group-hover:text-brand-magenta transition-colors">
+                                Atención como Sistema</h3>
+                            <p class="text-gray-600 text-xs line-clamp-3 mb-8 italic">"Del canal aislado a la
+                                experiencia integrada"</p>
+                            <a href="whitepapers.html#dt05"
+                                class="mt-auto text-white bg-brand-dark px-5 py-3 rounded-xl font-bold text-[10px] flex items-center gap-2 hover:bg-brand-magenta transition-all w-full justify-center uppercase tracking-widest">
+                                <i class="ph-bold ph-eyeglasses text-lg"></i> Consultar Documento
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- DT-06 -->
+                    <div class="pub-card bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-brand-dark hover:shadow-2xl transition-all flex flex-col h-full transform hover:-translate-y-2 group shadow-sm"
+                        data-category="arquitectura">
+                        <div class="p-8 flex flex-col items-start flex-grow">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span
+                                    class="bg-brand-dark text-white text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">DT-06</span>
+                                <span
+                                    class="text-gray-400 text-[8px] font-bold uppercase tracking-widest italic">Gobernanza</span>
+                            </div>
+                            <h3
+                                class="font-heading font-bold text-brand-dark text-lg mb-4 leading-tight group-hover:text-brand-dark transition-colors">
+                                Continuidad Institucional</h3>
+                            <p class="text-gray-600 text-xs line-clamp-3 mb-8 italic">"Cómo sostener la transformación
+                                más allá de las gestiones"</p>
+                            <a href="whitepapers.html#dt06"
+                                class="mt-auto text-white bg-brand-dark px-5 py-3 rounded-xl font-bold text-[10px] flex items-center gap-2 hover:bg-brand-dark transition-all w-full justify-center uppercase tracking-widest">
+                                <i class="ph-bold ph-eyeglasses text-lg"></i> Consultar Documento
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. FINANCIAMIENTO Y DONACIONES (Carrusel Grid) -->
+        <section id="financiamiento" class="py-24 bg-brand-dark text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5">
+            </div>
+            <div class="max-w-4xl mx-auto px-4 relative z-10">
+                <h2 class="font-heading text-3xl md:text-4xl font-bold text-white mb-4">Financiamos investigación
+                    aplicada</h2>
+                <p class="text-gray-400 text-sm md:text-base mb-12 leading-relaxed">
+                    El diseño de una arquitectura pública eficiente requiere independencia analítica. Aceptamos aportes
+                    orientados exclusivamente al desarrollo de papers técnicos y protocolos de código abierto.
+                </p>
+
+                <!-- Billeteras/Pagos -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                    <button onclick="alert('Redirigiendo a Mercado Pago para aporte único o suscripción mensual.')"
+                        class="bg-white/5 border border-white/10 p-6 rounded-xl hover:bg-[#009EE3]/20 hover:border-[#009EE3] transition-all group flex flex-col items-center gap-3">
+                        <div class="text-[#009EE3] group-hover:scale-110 transition-transform"><i
+                                class="ph-fill ph-handshake text-4xl"></i></div>
+                        <span class="font-bold text-white text-sm">Mercado Pago</span>
+                    </button>
+                    <button onclick="alert('Abriendo terminal de pago con Tarjeta de Crédito.')"
+                        class="bg-white/5 border border-white/10 p-6 rounded-xl hover:bg-brand-purple/20 hover:border-brand-purple transition-all group flex flex-col items-center gap-3">
+                        <div class="text-brand-purple group-hover:scale-110 transition-transform"><i
+                                class="ph-fill ph-credit-card text-4xl"></i></div>
+                        <span class="font-bold text-white text-sm">Tarjetas</span>
+                    </button>
+                    <button onclick="alert('Mostrando alias y CBU Institucional para transferencia directa.')"
+                        class="bg-white/5 border border-white/10 p-6 rounded-xl hover:bg-brand-magenta/20 hover:border-brand-magenta transition-all group flex flex-col items-center gap-3">
+                        <div class="text-brand-magenta group-hover:scale-110 transition-transform"><i
+                                class="ph-fill ph-bank text-4xl"></i></div>
+                        <span class="font-bold text-white text-sm">Transferencia</span>
+                    </button>
+                    <button onclick="alert('Mostrando Wallet Address (USDT / BTC).')"
+                        class="bg-white/5 border border-white/10 p-6 rounded-xl hover:bg-yellow-500/20 hover:border-yellow-500 transition-all group flex flex-col items-center gap-3">
+                        <div class="text-yellow-500 group-hover:scale-110 transition-transform"><i
+                                class="ph-fill ph-currency-btc text-4xl"></i></div>
+                        <span class="font-bold text-white text-sm">Crypto</span>
+                    </button>
+                </div>
+
+                <button onclick="document.getElementById('modal-financiamiento').classList.remove('hidden')"
+                    class="bg-transparent border border-gray-500 text-white font-medium py-3 px-8 rounded hover:bg-white hover:text-brand-dark transition-colors text-xs uppercase tracking-widest">
+                    Ver marco normativo de aportes
+                </button>
+            </div>
+        </section>
+
+        <!-- 10.B. FORMULARIO DE CONTACTO (NUEVO) -->
+        <section id="contacto-general" class="py-24 bg-white border-b border-gray-100 relative">
+            <div class="absolute top-0 right-0 w-1/3 h-full bg-brand-light transform -skew-x-12 opacity-50 z-0"></div>
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-12">
+                    <span
+                        class="text-brand-magenta font-bold text-xs uppercase tracking-widest block mb-2">Hablemos</span>
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-brand-dark mb-4">Formulario de Contacto
+                    </h2>
+                    <p class="text-gray-600 text-sm max-w-2xl mx-auto">Déjanos tu mensaje y nuestro equipo
+                        interdisciplinario se pondrá en contacto a la brevedad.</p>
+                </div>
+
+                <div
+                    class="bg-white p-8 sm:p-10 rounded-2xl border border-gray-200 shadow-xl shadow-brand-purple/5 relative overflow-hidden">
+                    <div
+                        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-purple via-brand-magenta to-brand-orange">
+                    </div>
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Nombre
+                                    Completo</label>
+                                <input type="text" id="contact-name" name="name" required
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-purple/20 focus:border-brand-purple outline-none transition-all text-sm"
+                                    placeholder="Ej. Juan Pérez">
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Correo
+                                    Electrónico</label>
+                                <input type="email" id="contact-email" name="email" required
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-magenta/20 focus:border-brand-magenta outline-none transition-all text-sm"
+                                    placeholder="ejemplo@correo.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Asunto</label>
+                            <input type="text" id="contact-subject" name="subject" required
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-orange/20 focus:border-brand-orange outline-none transition-all text-sm"
+                                placeholder="Ej. Consulta sobre integración de datos">
+                        </div>
+                        <div>
+                            <label
+                                class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Mensaje</label>
+                            <textarea id="contact-message" name="message" required rows="4"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all text-sm resize-none"
+                                placeholder="Escribe tu consulta aquí..."></textarea>
+                        </div>
+                        <div class="pt-2">
+                            <button type="submit" id="btn-contact-submit"
+                                class="w-full sm:w-auto px-8 py-3.5 bg-brand-dark text-white font-bold rounded-lg hover:bg-brand-purple transition-colors text-sm uppercase tracking-wider flex items-center justify-center gap-2 group">
+                                Enviar Mensaje <i
+                                    class="ph-bold ph-paper-plane-right group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. CONTACTO (Evaluación Técnica) -->
+        <section id="contacto" class="py-24 bg-brand-light">
+            <div class="max-w-3xl mx-auto px-4">
+                <div class="text-center mb-10">
+                    <h2 class="font-heading text-3xl font-bold text-brand-dark mb-2">Solicitud de Evaluación Técnica
+                    </h2>
+                    <p class="text-gray-600 text-sm">Iniciemos un diagnóstico preliminar sobre la arquitectura de
+                        integración de su organismo.</p>
+                </div>
+
+                <form onsubmit="handleTechnicalSubmit(event)"
+                    class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <input type="text"
+                            class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm"
+                            placeholder="Nombre completo" required>
+                        <input type="email"
+                            class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm"
+                            placeholder="Email institucional" required>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <input type="text"
+                            class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm"
+                            placeholder="Organismo o Entidad" required>
+                        <input type="text"
+                            class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm"
+                            placeholder="Rol / Área de gestión" required>
+                    </div>
+                    <input type="text"
+                        class="w-full px-4 py-3 rounded border border-gray-300 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-brand-purple outline-none text-sm mb-6"
+                        placeholder="Desafío prioritario de integración (1 frase)" required>
+
+                    <button type="submit"
+                        class="w-full bg-brand-dark text-white font-bold py-3.5 rounded hover:bg-black transition-colors text-sm uppercase tracking-wider">
+                        Enviar Solicitud al Comité
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-white py-12 border-t border-gray-200 text-gray-500 text-sm">
+            <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-2 grayscale">
+                    <span class="font-heading font-bold text-gray-800 tracking-widest uppercase">Red Social
+                        Fundación</span>
+                </div>
+                <p>&copy; 2026. Diseño de Arquitectura Pública Integrada.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-brand-purple transition-colors"><i
+                            class="ph-fill ph-linkedin-logo text-xl"></i></a>
+                    <a href="#" class="hover:text-brand-dark transition-colors"><i
+                            class="ph-fill ph-envelope-simple text-xl"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- FIN MAIN-WEBSITE -->
+
+    <!-- ========================================== -->
+    <!-- PORTAL EXCLUSIVO (FULL SCREEN HIJACK)      -->
+    <!-- ========================================== -->
+    <div id="portal-fullscreen" class="fixed inset-0 z-[9999] bg-brand-dark overflow-y-auto hidden">
+        <!-- Fondo animado dinámico -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <div
+                class="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-brand-purple rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-blob">
+            </div>
+            <div class="absolute top-[20%] right-[-10%] w-[50%] h-[50%] bg-brand-magenta rounded-full mix-blend-screen filter blur-[120px] opacity-30"
+                style="animation-delay: 2s;"></div>
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5">
+            </div>
+        </div>
+
+        <div class="relative z-10 w-full min-h-screen flex flex-col p-4 sm:p-8">
+            <!-- Header Portal -->
+            <div class="flex justify-between items-center mb-12">
+                <div
+                    class="text-white font-heading font-bold text-xl tracking-widest uppercase flex items-center gap-3">
+                    <i class="ph-duotone ph-fingerprint text-brand-yellow text-3xl"></i> Repositorio <span
+                        class="text-brand-purple">Institucional</span>
+                </div>
+                <button onclick="closePortal()"
+                    class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors">
+                    <i class="ph-bold ph-arrow-left"></i> Volver al Sitio
+                </button>
+            </div>
+
+            <!-- CONTENEDOR DE AUTENTICACIÓN DINÁMICO -->
+            <div id="portal-auth-container"
+                class="flex-grow flex items-center justify-center transition-opacity duration-500">
+
+                <!-- Vista: LOGIN -->
+                <div id="portal-login-view"
+                    class="bg-[#0f0510]/80 backdrop-blur-2xl p-10 rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(138,43,136,0.2)] w-full max-w-md transition-all duration-300">
+                    <h3 class="font-heading text-2xl font-bold text-white mb-2 text-center">Validación Requerida</h3>
+                    <p id="portal-status-tag" class="text-gray-400 text-xs text-center mb-8 uppercase tracking-widest">
+                        Acceso Estratégico</p>
+
+                    <form onsubmit="handlePortalLogin(event)">
+                        <div class="mb-5">
+                            <label
+                                class="block text-xs font-bold text-brand-magenta uppercase tracking-wider mb-2">Credencial
+                                Institucional</label>
+                            <div class="relative group">
+                                <i
+                                    class="ph-fill ph-user absolute left-4 top-3.5 text-gray-500 group-focus-within:text-brand-yellow transition-colors"></i>
+                                <input type="email" id="login-email" required
+                                    class="w-full pl-12 pr-4 py-3 rounded bg-black/50 text-white placeholder-gray-600 border border-white/10 focus:border-brand-yellow outline-none transition-colors"
+                                    placeholder="admin@redsocial.org">
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-xs font-bold text-brand-magenta uppercase tracking-wider">Clave
+                                    de Acceso</label>
+                                <button type="button" onclick="toggleAuthView('portal-recovery-view')"
+                                    class="text-[10px] text-gray-400 hover:text-brand-yellow transition-colors uppercase tracking-wider font-bold">¿Olvidó
+                                    su clave?</button>
+                            </div>
+                            <div class="relative group">
+                                <i
+                                    class="ph-fill ph-lock-key absolute left-4 top-3.5 text-gray-500 group-focus-within:text-brand-yellow transition-colors"></i>
+                                <input type="password" id="login-password" required
+                                    class="w-full pl-12 pr-4 py-3 rounded bg-black/50 text-white placeholder-gray-600 border border-white/10 focus:border-brand-yellow outline-none transition-colors"
+                                    placeholder="••••••••">
+                            </div>
+                        </div>
+                        <button type="submit" id="btn-login"
+                            class="w-full bg-gradient-to-r from-brand-orange to-brand-yellow text-brand-dark font-bold py-3.5 rounded hover:scale-[1.02] shadow-[0_0_15px_rgba(244,208,63,0.3)] transition-all flex items-center justify-center gap-2 uppercase tracking-wider text-sm mb-6">
+                            Autorizar Ingreso <i class="ph-bold ph-arrow-right"></i>
+                        </button>
+
+                        <div class="text-center border-t border-white/10 pt-6">
+                            <p class="text-xs text-gray-400">¿No tiene credenciales? <button type="button"
+                                    onclick="toggleAuthView('portal-register-view')"
+                                    class="text-brand-yellow font-bold hover:underline transition-all">Solicitar
+                                    Acceso</button></p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Vista: REGISTRO -->
+                <div id="portal-register-view"
+                    class="bg-[#0f0510]/80 backdrop-blur-2xl p-10 rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(230,33,126,0.2)] w-full max-w-md hidden transition-all duration-300">
+                    <button type="button" onclick="toggleAuthView('portal-login-view')"
+                        class="text-gray-400 hover:text-white mb-6 flex items-center gap-1 text-xs uppercase font-bold tracking-wider transition-colors"><i
+                            class="ph-bold ph-arrow-left"></i> Volver</button>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-2 text-center">Crear Credencial</h3>
+                    <p class="text-gray-400 text-[10px] text-center mb-6 uppercase tracking-widest leading-relaxed">Las
+                        cuentas están sujetas a aprobación manual por parte del comité.</p>
+
+                    <form onsubmit="handlePortalRegister(event)">
+                        <div class="mb-4">
+                            <div class="relative group">
+                                <i
+                                    class="ph-fill ph-identification-card absolute left-4 top-3.5 text-gray-500 group-focus-within:text-brand-magenta transition-colors"></i>
+                                <input type="text" id="register-name" required
+                                    class="w-full pl-12 pr-4 py-3 rounded bg-black/50 text-white placeholder-gray-500 border border-white/10 focus:border-brand-magenta outline-none transition-colors text-sm"
+                                    placeholder="Nombre y Apellido">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="relative group">
+                                <i
+                                    class="ph-fill ph-envelope absolute left-4 top-3.5 text-gray-500 group-focus-within:text-brand-magenta transition-colors"></i>
+                                <input type="email" id="register-email" required
+                                    class="w-full pl-12 pr-4 py-3 rounded bg-black/50 text-white placeholder-gray-500 border border-white/10 focus:border-brand-magenta outline-none transition-colors text-sm"
+                                    placeholder="Correo Electrónico">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="relative group">
+                                <i
+                                    class="ph-fill ph-lock-key absolute left-4 top-3.5 text-gray-500 group-focus-within:text-brand-magenta transition-colors"></i>
+                                <input type="password" id="register-password" required
+                                    class="w-full pl-12 pr-4 py-3 rounded bg-black/50 text-white placeholder-gray-500 border border-white/10 focus:border-brand-magenta outline-none transition-colors text-sm"
+                                    placeholder="Contraseña">
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <div class="relative group">
+                                <i
+                                    class="ph-fill ph-check-circle absolute left-4 top-3.5 text-gray-500 group-focus-within:text-brand-magenta transition-colors"></i>
+                                <input type="password" id="register-passwordConfirm" required
+                                    class="w-full pl-12 pr-4 py-3 rounded bg-black/50 text-white placeholder-gray-500 border border-white/10 focus:border-brand-magenta outline-none transition-colors text-sm"
+                                    placeholder="Repetir Contraseña">
+                            </div>
+                        </div>
+                        <button type="submit" id="btn-register"
+                            class="w-full bg-gradient-to-r from-brand-purple to-brand-magenta text-white font-bold py-3.5 rounded hover:scale-[1.02] shadow-[0_0_15px_rgba(230,33,126,0.3)] transition-all flex items-center justify-center gap-2 uppercase tracking-wider text-sm mb-4">
+                            Registrar Credencial
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Vista: RECUPERACIÓN -->
+                <div id="portal-recovery-view"
+                    class="bg-[#0f0510]/80 backdrop-blur-2xl p-10 rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(249,157,28,0.2)] w-full max-w-md hidden transition-all duration-300">
+                    <button type="button" onclick="toggleAuthView('portal-login-view')"
+                        class="text-gray-400 hover:text-white mb-6 flex items-center gap-1 text-xs uppercase font-bold tracking-wider transition-colors"><i
+                            class="ph-bold ph-arrow-left"></i> Volver</button>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-2 text-center flex flex-col items-center">
+                        <i class="ph-duotone ph-shield-warning text-4xl text-brand-orange mb-3"></i>
+                        Restaurar Clave
+                    </h3>
+                    <p class="text-gray-400 text-xs text-center mb-8">Ingresa tu correo institucional y te enviaremos
+                        instrucciones seguras para recuperar el acceso temporal.</p>
+
+                    <form onsubmit="handlePortalRecovery(event)">
+                        <div class="mb-6">
+                            <label
+                                class="block text-xs font-bold text-brand-orange uppercase tracking-wider mb-2">Correo
+                                Institucional</label>
+                            <div class="relative group">
+                                <i
+                                    class="ph-fill ph-envelope absolute left-4 top-3.5 text-gray-500 group-focus-within:text-brand-orange transition-colors"></i>
+                                <input type="email" id="recovery-email" required
+                                    class="w-full pl-12 pr-4 py-3 rounded bg-black/50 text-white placeholder-gray-600 border border-white/10 focus:border-brand-orange outline-none transition-colors"
+                                    placeholder="admin@redsocial.org">
+                            </div>
+                        </div>
+                        <button type="submit" id="btn-recovery"
+                            class="w-full bg-brand-orange text-brand-dark font-bold py-3.5 rounded hover:scale-[1.02] hover:bg-[#ffb03b] transition-all flex items-center justify-center gap-2 uppercase tracking-wider text-sm mb-2">
+                            Enviar Enlace <i class="ph-bold ph-paper-plane-right"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="portal-dashboard-view"
+                class="hidden opacity-0 transition-opacity duration-500 max-w-6xl mx-auto w-full">
+                <div
+                    class="mb-10 pb-6 border-b border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="font-heading text-3xl font-bold text-white mb-1">Activos de Gobernanza</h2>
+                        <p
+                            class="text-brand-yellow text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Sesión Encriptada
+                            Activa
+                        </p>
+                    </div>
+                    <button onclick="logoutPortal()"
+                        class="text-gray-400 hover:text-white px-4 py-2 border border-white/10 rounded font-bold transition-colors text-xs uppercase flex items-center gap-2">
+                        <i class="ph-bold ph-sign-out"></i> Cerrar Sesión Segura
+                    </button>
+                </div>
+
+                <!-- 4 Tiles Estratégicos -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <div
+                        class="glass-panel-dark rounded-xl p-6 hover:bg-white/5 transition-colors cursor-pointer group">
+                        <i
+                            class="ph-duotone ph-file-text text-3xl text-brand-yellow mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="font-bold text-white text-sm mb-2">Documentos Técnicos</h3>
+                        <p class="text-gray-400 text-xs">Whitepapers, guías y anexos conceptuales.</p>
+                    </div>
+                    <div
+                        class="glass-panel-dark rounded-xl p-6 hover:bg-white/5 transition-colors cursor-pointer group">
+                        <i
+                            class="ph-duotone ph-folder-open text-3xl text-brand-magenta mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="font-bold text-white text-sm mb-2">Protocolos Operativos</h3>
+                        <p class="text-gray-400 text-xs">Estándares, scripts de atención y reglas BPM.</p>
+                    </div>
+                    <div
+                        class="glass-panel-dark rounded-xl p-6 hover:bg-white/5 transition-colors cursor-pointer group">
+                        <i
+                            class="ph-duotone ph-chart-bar text-3xl text-brand-orange mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="font-bold text-white text-sm mb-2">Glosario de Métricas</h3>
+                        <p class="text-gray-400 text-xs">Fórmulas de CSAT, SLA, TMA y ejemplos de Dashboards.</p>
+                    </div>
+                    <div
+                        class="glass-panel-dark rounded-xl p-6 hover:bg-white/5 transition-colors cursor-pointer group">
+                        <i
+                            class="ph-duotone ph-code-block text-3xl text-brand-purple mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="font-bold text-white text-sm mb-2">Componentes API</h3>
+                        <p class="text-gray-400 text-xs">Documentación de integración e interoperabilidad.</p>
+                    </div>
+                </div>
+
+                <!-- Biblioteca de Manuales PDF -->
+                <h3 class="font-heading text-xl font-bold text-white mb-6 border-t border-white/10 pt-8"><i
+                        class="ph-bold ph-books mr-2"></i> Biblioteca de Manuales Institucionales</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-20">
+                    <div
+                        class="manual-card bg-white rounded-xl overflow-hidden relative group flex flex-col h-72 border border-white/10 shadow-lg">
+                        <div class="absolute inset-0 bg-black/80 z-0"></div>
+                        <div
+                            class="relative z-10 w-full h-full bg-[#4A90E2]/90 flex flex-col items-center justify-center p-6 text-center shadow-inner">
+                            <h3 class="font-heading font-bold text-white text-sm leading-snug">MANUAL DE BUENAS
+                                PRÁCTICAS Y HABILIDADES</h3>
+                            <div class="mt-auto pt-6"><span
+                                    class="text-white font-bold text-[8px] uppercase tracking-widest border border-white/40 px-3 py-1 rounded">Activo
+                                    Institucional</span></div>
+                        </div>
+                    </div>
+                    <div
+                        class="manual-card bg-white rounded-xl overflow-hidden relative group flex flex-col h-72 border border-white/10 shadow-lg">
+                        <div class="absolute inset-0 bg-black/80 z-0"></div>
+                        <div
+                            class="relative z-10 w-full h-full bg-[#F5A623]/90 flex flex-col items-center justify-center p-6 text-center shadow-inner">
+                            <h3 class="font-heading font-bold text-white text-sm leading-snug mb-2">GUÍA DE CANALES
+                                DIGITALES</h3>
+                            <div class="mt-auto pt-4"><span
+                                    class="text-white font-bold text-[8px] uppercase tracking-widest border border-white/40 px-3 py-1 rounded">Activo
+                                    Institucional</span></div>
+                        </div>
+                    </div>
+                    <div
+                        class="manual-card bg-white rounded-xl overflow-hidden relative group flex flex-col h-72 border border-white/10 shadow-lg">
+                        <div class="absolute inset-0 bg-white/90 z-0"></div>
+                        <div
+                            class="relative z-10 w-full h-full bg-[#F8E71C]/90 flex flex-col items-center justify-center p-6 text-center shadow-inner">
+                            <h3 class="font-heading font-bold text-brand-dark text-sm leading-snug mb-2">MANUAL DE
+                                PROCESOS Y KPIS</h3>
+                            <div class="mt-auto pt-2"><span
+                                    class="text-brand-dark font-bold text-[8px] uppercase tracking-widest border border-brand-dark/20 px-3 py-1 rounded">Activo
+                                    Institucional</span></div>
+                        </div>
+                    </div>
+                    <div
+                        class="manual-card bg-white rounded-xl overflow-hidden relative group flex flex-col h-72 border border-white/10 shadow-lg">
+                        <div class="absolute inset-0 bg-black/80 z-0"></div>
+                        <div
+                            class="relative z-10 w-full h-full bg-[#50E3C2]/90 flex flex-col items-center justify-center p-6 text-center shadow-inner">
+                            <h3 class="font-heading font-bold text-brand-dark text-sm leading-snug">MANUAL DE ATENCIÓN
+                                CIUDADANA</h3>
+                            <div class="mt-auto pt-6"><span
+                                    class="text-brand-dark font-bold text-[8px] uppercase tracking-widest border border-brand-dark/20 px-3 py-1 rounded">Activo
+                                    Institucional</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EQUIPO -->
+    <div id="profile-modal" class="fixed inset-0 z-[1000] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-brand-dark/80 backdrop-blur-sm transition-opacity" onclick="closeProfile()">
+        </div>
+        <div class="relative bg-white rounded-xl max-w-sm w-full p-8 shadow-2xl z-10 flex flex-col items-center transform scale-95 transition-transform"
+            id="profile-card">
+            <button onclick="closeProfile()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-brand-dark transition-colors"><i
+                    class="ph-bold ph-x text-lg"></i></button>
+            <div id="modal-img-container" class="w-24 h-24 rounded-full overflow-hidden mb-4 border border-gray-200">
+            </div>
+            <h3 id="modal-name" class="font-heading text-lg font-bold text-brand-dark text-center leading-none">Nombre
+            </h3>
+            <p id="modal-role"
+                class="text-brand-purple font-semibold text-xs text-center uppercase tracking-wider mt-2">Rol</p>
+            <p id="modal-title" class="text-gray-500 text-xs text-center mb-6 mt-1">Título</p>
+            <p id="modal-bio" class="text-gray-600 text-sm leading-relaxed text-center border-t border-gray-100 pt-4">
+                Biografía...</p>
+        </div>
+    </div>
+
+    <!-- MODAL PDF VISOR EGANTE -->
+    <div id="pdf-modal" class="fixed inset-0 z-[1000] hidden flex items-center justify-center p-4 sm:p-6">
+        <div class="absolute inset-0 bg-brand-dark/95 backdrop-blur-md" onclick="closePdf()"></div>
+        <div class="relative bg-gray-100 rounded-xl w-full max-w-5xl h-[85vh] shadow-2xl z-10 flex flex-col overflow-hidden transform scale-95 transition-transform"
+            id="pdf-card">
+            <div class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm z-20">
+                <span class="font-bold text-gray-800 text-sm flex items-center gap-3"><i
+                        class="ph-fill ph-file-pdf text-red-500 text-xl"></i> Visor_Documento_Tecnico.pdf</span>
+                <button onclick="closePdf()"
+                    class="text-gray-400 hover:text-red-500 bg-gray-50 hover:bg-red-50 p-2 rounded-full transition-colors"><i
+                        class="ph-bold ph-x text-lg"></i></button>
+            </div>
+            <div class="flex-grow flex items-center justify-center relative p-6 bg-[#525659]">
+                <!-- Simulación del Paper PDF embebido -->
+                <div
+                    class="w-full h-full max-w-3xl bg-white shadow-2xl mx-auto overflow-y-auto p-12 text-center flex flex-col items-center justify-center">
+                    <i class="ph-duotone ph-books text-6xl text-brand-purple mb-4"></i>
+                    <h2 class="font-heading text-3xl font-bold text-brand-dark mb-4">Arquitectura Pública Integrada</h2>
+                    <p class="text-gray-500 text-sm max-w-md mx-auto mb-8">El documento técnico está siendo cargado. En
+                        un entorno real, aquí se mostrará el visualizador PDF nativo o iframe.</p>
+                    <div class="w-16 h-1 bg-gray-200 rounded-full animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FINANCIAMIENTO -->
+    <div id="modal-financiamiento" class="fixed inset-0 z-[1000] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-brand-dark/90 backdrop-blur-sm transition-opacity"
+            onclick="document.getElementById('modal-financiamiento').classList.add('hidden')"></div>
+        <div class="relative bg-white rounded-xl max-w-md w-full p-8 shadow-2xl z-10">
+            <button onclick="document.getElementById('modal-financiamiento').classList.add('hidden')"
+                class="absolute top-4 right-4 text-gray-400 hover:text-brand-dark"><i
+                    class="ph-bold ph-x text-lg"></i></button>
+            <h3 class="font-heading text-xl font-bold text-brand-dark mb-2">Marco Normativo de Aportes</h3>
+            <p class="text-gray-500 text-xs mb-6 leading-relaxed">Toda colaboración está sujeta a auditoría técnica y se
+                destina exclusivamente a investigación.</p>
+            <ul class="space-y-3 text-sm text-gray-700 mb-6">
+                <li class="flex gap-2"><i class="ph-bold ph-check text-brand-purple mt-0.5"></i> Sin condicionamiento de
+                    proveedores.</li>
+                <li class="flex gap-2"><i class="ph-bold ph-check text-brand-purple mt-0.5"></i> Transparencia activa en
+                    la ejecución.</li>
+                <li class="flex gap-2"><i class="ph-bold ph-check text-brand-purple mt-0.5"></i> Publicación de código
+                    abierto.</li>
+            </ul>
+            <button onclick="document.getElementById('modal-financiamiento').classList.add('hidden')"
+                class="w-full bg-gray-100 hover:bg-gray-200 text-brand-dark font-bold py-2 rounded transition-colors text-sm">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Scripts Completos -->
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+    <script>
+        // 1. Scroll Reveal (Intersection Observer)
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealElements = document.querySelectorAll('.reveal-up');
+            const observerOptions = {
+                root: null,
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // 2. Contadores Dinámicos
+            const counters = document.querySelectorAll('.counter');
+            const counterObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = parseFloat(entry.target.getAttribute('data-target'));
+                        const decimals = parseInt(entry.target.getAttribute('data-decimals')) || 0;
+                        const duration = 2000; // 2s anim
+                        const frameRate = 30;
+                        const totalFrames = Math.round(duration / frameRate);
+                        let frame = 0;
+
+                        const counterInterval = setInterval(() => {
+                            frame++;
+                            const progress = frame / totalFrames;
+                            // easeOutExpo
+                            const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                            const current = target * easeOut;
+
+                            if (frame >= totalFrames) {
+                                entry.target.innerText = target.toFixed(decimals);
+                                clearInterval(counterInterval);
+                            } else {
+                                entry.target.innerText = current.toFixed(decimals);
+                            }
+                        }, frameRate);
+
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            counters.forEach(counter => counterObserver.observe(counter));
+
+            // 3. Accesibilidad de Modales (Focus Trap & Escape Key)
+            const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+            let activeModal = null;
+
+            const trapFocus = (e) => {
+                if (!activeModal) return;
+                const modal = document.getElementById(activeModal);
+                const focusables = modal.querySelectorAll(focusableElements);
+                const firstFocusable = focusables[0];
+                const lastFocusable = focusables[focusables.length - 1];
+
+                if (e.key === 'Tab') {
+                    if (e.shiftKey) { // Shift + Tab
+                        if (document.activeElement === firstFocusable) {
+                            lastFocusable.focus();
+                            e.preventDefault();
+                        }
+                    } else { // Tab
+                        if (document.activeElement === lastFocusable) {
+                            firstFocusable.focus();
+                            e.preventDefault();
+                        }
+                    }
+                }
+            };
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && activeModal) {
+                    const closeBtns = {
+                        'profile-modal': closeProfile,
+                        'pdf-modal': closePdf,
+                        'modal-financiamiento': closeFinModal
+                    };
+                    if (closeBtns[activeModal]) closeBtns[activeModal]();
+                }
+                trapFocus(e);
+            });
+
+            // Función global para rastrear modal activo
+            window.setActiveModal = (id) => {
+                activeModal = id;
+                if (id) {
+                    setTimeout(() => {
+                        const modal = document.getElementById(id);
+                        const first = modal.querySelectorAll(focusableElements)[0];
+                        if (first) first.focus();
+                    }, 100);
+                }
+            };
+        });
+
+        // Lógica Navbar y Menú
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a, #mobile-menu button').forEach(el => {
+            el.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+        });
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                nav.classList.add('shadow-md'); nav.classList.remove('shadow-sm', 'border-gray-100');
+            } else {
+                nav.classList.add('shadow-sm', 'border-gray-100'); nav.classList.remove('shadow-md');
+            }
+        });
+
+        // Verticales Acordeón JS
+        function toggleVertical(element) {
+            const content = element.querySelector('.accordion-content');
+            const icon = element.querySelector('.icon-arrow');
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.classList.remove('rotate-180');
+            } else {
+                // Cerrar otros si se desea (opcional)
+                document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open'));
+                document.querySelectorAll('.icon-arrow').forEach(i => i.classList.remove('rotate-180'));
+
+                content.classList.add('open');
+                icon.classList.add('rotate-180');
+            }
+        }
+
+        // Filtros Publicaciones (Think Tank)
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const pubCards = document.querySelectorAll('.pub-card');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(f => {
+                    f.classList.remove('bg-brand-dark', 'text-white');
+                    f.classList.add('border-gray-300', 'text-gray-600');
+                });
+                btn.classList.add('bg-brand-dark', 'text-white');
+                btn.classList.remove('border-gray-300', 'text-gray-600');
+
+                const filterVal = btn.getAttribute('data-filter');
+                pubCards.forEach(card => {
+                    if (filterVal === 'all' || card.getAttribute('data-category') === filterVal) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Fichas Equipo
+        function openProfile(name, role, title, bio, imgUrl) {
+            document.getElementById('modal-name').innerText = name;
+            document.getElementById('modal-role').innerText = role;
+            document.getElementById('modal-title').innerHTML = title;
+            document.getElementById('modal-bio').innerText = bio;
+            document.getElementById('modal-img-container').innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover">`;
+
+            document.getElementById('profile-modal').classList.remove('hidden');
+            window.setActiveModal('profile-modal');
+            setTimeout(() => document.getElementById('profile-card').classList.remove('scale-95'), 10);
+        }
+        function closeProfile() {
+            document.getElementById('profile-card').classList.add('scale-95');
+            setTimeout(() => {
+                document.getElementById('profile-modal').classList.add('hidden');
+                window.setActiveModal(null);
+            }, 200);
+        }
+
+        // Visor PDF
+        function openPdf() {
+            document.getElementById('pdf-modal').classList.remove('hidden');
+            window.setActiveModal('pdf-modal');
+            setTimeout(() => document.getElementById('pdf-card').classList.remove('scale-95'), 10);
+        }
+        function closePdf() {
+            document.getElementById('pdf-card').classList.add('scale-95');
+            setTimeout(() => {
+                document.getElementById('pdf-modal').classList.add('hidden');
+                window.setActiveModal(null);
+            }, 200);
+        }
+
+        // Portal Hijack (Pantalla Completa)
+        function openPortalLogin() {
+            document.getElementById('main-website').classList.add('hidden');
+            document.getElementById('portal-fullscreen').classList.remove('hidden');
+
+            // Asegurar que siempre inicie en login
+            toggleAuthView('portal-login-view');
+
+            document.getElementById('portal-dashboard-view').classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function closePortal() {
+            document.getElementById('portal-fullscreen').classList.add('hidden');
+            document.getElementById('main-website').classList.remove('hidden');
+        }
+
+        function toggleAuthView(viewId) {
+            const views = ['portal-login-view', 'portal-register-view', 'portal-recovery-view'];
+
+            views.forEach(id => {
+                const el = document.getElementById(id);
+                if (id === viewId) {
+                    el.classList.remove('hidden');
+                    setTimeout(() => el.style.opacity = '1', 10);
+                } else {
+                    el.style.opacity = '0';
+                    setTimeout(() => el.classList.add('hidden'), 300);
+                }
+            });
+        }
+
+        // PocketBase Initialization
+        const pb = new PocketBase('http://127.0.0.1:8090');
+
+        async function handlePortalLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login');
+            btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Validando...';
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                // Autenticar con PocketBase
+                const authData = await pb.collection('users').authWithPassword(email, password);
+
+                document.getElementById('portal-auth-container').classList.add('hidden');
+                document.getElementById('portal-dashboard-view').classList.remove('hidden');
+                setTimeout(() => document.getElementById('portal-dashboard-view').classList.remove('opacity-0'), 50);
+
+                e.target.reset();
+            } catch (error) {
+                console.warn('PocketBase offline. Entrando en Modo Demo para GitHub Pages.');
+
+                // CREDENCIAL DE CORTESÍA PARA GITHUB PAGES
+                if (email === 'admin@redsocial.org' || email === 'invitado@redsocial.org') {
+                    document.getElementById('portal-auth-container').classList.add('hidden');
+                    document.getElementById('portal-dashboard-view').classList.remove('hidden');
+                    setTimeout(() => document.getElementById('portal-dashboard-view').classList.remove('opacity-0'), 50);
+
+                    // Cambiar tag de estado
+                    const statusTag = document.getElementById('portal-status-tag');
+                    if (statusTag) {
+                        statusTag.innerHTML = '<span class="text-brand-yellow">Modo Demostración Activo</span>';
+                        statusTag.classList.remove('text-gray-400');
+                    }
+                } else {
+                    alert('MODO DEMO: Use "invitado@redsocial.org" para visualizar el portal sin servidor activo.');
+                }
+            } finally {
+                btn.innerHTML = 'Autorizar Ingreso <i class="ph-bold ph-arrow-right"></i>';
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
+        async function handlePortalRegister(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-register');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Registrando...';
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            const data = {
+                name: document.getElementById('register-name').value,
+                email: document.getElementById('register-email').value,
+                password: document.getElementById('register-password').value,
+                passwordConfirm: document.getElementById('register-passwordConfirm').value,
+            };
+
+            try {
+                // Crear Registro en PocketBase
+                await pb.collection('users').create(data);
+                alert('Solicitud de credencial enviada. Puede iniciar sesión ahora.');
+                e.target.reset();
+                toggleAuthView('portal-login-view');
+            } catch (error) {
+                alert('Error al registrar. Las contraseñas deben coincidir y el correo debe ser válido/único.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
+        async function handlePortalRecovery(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-recovery');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Enviando...';
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            const email = document.getElementById('recovery-email').value;
+
+            try {
+                // Request Password Reset in PocketBase
+                await pb.collection('users').requestPasswordReset(email);
+                alert('Si el correo existe en nuestra base, recibirá instrucciones de recuperación en breve.');
+                e.target.reset();
+                toggleAuthView('portal-login-view');
+            } catch (error) {
+                alert('Error en la comunicación con el servidor de autenticación.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
+        function logoutPortal() {
+            pb.authStore.clear(); // Limpiar sesión PocketBase
+            document.getElementById('portal-dashboard-view').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('portal-dashboard-view').classList.add('hidden');
+                document.getElementById('portal-auth-container').classList.remove('hidden');
+                toggleAuthView('portal-login-view');
+            }, 500);
+        }
+
+        // Lógica Formspree
+        document.getElementById('contact-form')?.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-contact-submit');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Enviando...';
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('https://formspree.io/f/xvzbnbzo', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    alert('¡Mensaje enviado con éxito! Nos comunicaremos pronto.');
+                    this.reset();
+                } else {
+                    alert('Hubo un problema al enviar el mensaje por Formspree. Intenta nuevamente.');
+                }
+            } catch (error) {
+                alert('Error de conexión. Verifica tu internet.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        });
+
+        // Lógica Formulario Técnico
+        async function handleTechnicalSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+
+            btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Procesando...';
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('https://formspree.io/f/xvzbnbzo', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    alert('¡Solicitud registrada con éxito! El Comité Técnico evaluará su caso y se pondrá en contacto pronto.');
+                    form.reset();
+                } else {
+                    alert('Hubo un problema al registrar la solicitud. Por favor, intente nuevamente.');
+                }
+            } catch (error) {
+                alert('Error de conexión. Verifique su internet.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+    </script>
+</body>
+
+</html>
