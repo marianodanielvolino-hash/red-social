@@ -2463,8 +2463,8 @@
                 <form onsubmit="startCheck(event)" class="space-y-4">
                     <div>
                         <label class="block text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-2">Nombre
-                            del Organismo</label>
-                        <input require id="w-organismo" type="text" placeholder="Ej: Municipio de..."
+                            de la Organización / Organismo</label>
+                        <input require id="w-organismo" type="text" placeholder="Ej: Municipio / Empresa..."
                             class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-brand-magenta outline-none transition-all">
                     </div>
                     <div>
@@ -2634,15 +2634,15 @@
     <!-- Script de Lógica del Widget -->
     <script>
         const widgetQuestions = [
-            { category: "Canales y Atención", text: "El organismo tiene al menos un canal digital de atención activo (web, chat, app)." },
+            { category: "Canales y Atención", text: "La organización tiene al menos un canal digital de atención activo (web, chat, app)." },
             { category: "Canales y Atención", text: "Los canales están unificados bajo una misma bandeja o sistema de seguimiento." },
-            { category: "Canales y Atención", text: "El ciudadano puede hacer seguimiento de su trámite de forma autónoma." },
-            { category: "Canales y Atención", text: "Existe protocolo de respuesta con tiempos definidos por canal." },
+            { category: "Canales y Atención", text: "El usuario o ciudadano puede hacer seguimiento de su trámite o pedido de forma autónoma." },
+            { category: "Canales y Atención", text: "Existe un protocolo de respuesta con tiempos definidos por canal." },
 
-            { category: "Datos y Trazabilidad", text: "Los trámites se registran digitalmente desde el inicio hasta el cierre." },
+            { category: "Datos y Trazabilidad", text: "Las gestiones se registran digitalmente desde el inicio hasta el cierre." },
             { category: "Datos y Trazabilidad", text: "Existe un tablero o reporte periódico de métricas de gestión." },
             { category: "Datos y Trazabilidad", text: "Los datos de diferentes áreas pueden cruzarse sin intervención manual." },
-            { category: "Datos y Trazabilidad", text: "Se miden indicadores de satisfacción ciudadana (CSAT, NPS u otro)." },
+            { category: "Datos y Trazabilidad", text: "Se miden indicadores de satisfacción (CSAT, NPS u otro)." },
 
             { category: "Procesos y Flujos", text: "Los procesos críticos están documentados y son conocidos por el equipo." },
             { category: "Procesos y Flujos", text: "Existen flujos de aprobación definidos y respetados en la práctica." },
@@ -2650,11 +2650,16 @@
 
             { category: "Cultura y Capacidades", text: "El equipo utiliza herramientas digitales de colaboración en el día a día." },
             { category: "Cultura y Capacidades", text: "Existe capacitación formal o informal en competencias digitales." },
-            { category: "Cultura y Capacidades", text: "Los mandos medios tienen acceso a información para tomar decisiones." },
+            { category: "Cultura y Capacidades", text: "Los niveles medios tienen acceso a información para tomar decisiones." },
 
-            { category: "Gobierno y Continuidad", text: "Las iniciativas digitales tienen presupuesto asignado formalmente." },
-            { category: "Gobierno y Continuidad", text: "Existe un responsable o área de modernización/transformación digital." },
-            { category: "Gobierno y Continuidad", text: "Los cambios implementados sobreviven la rotación de autoridades." }
+            { category: "Gobernanza y Sostenibilidad", text: "Las iniciativas estratégicas tienen presupuesto asignado formalmente." },
+            { category: "Gobernanza y Sostenibilidad", text: "Existe un responsable o área de modernización / mejora de procesos." },
+            { category: "Gobernanza y Sostenibilidad", text: "Los cambios implementados sobreviven a la rotación de directivos." },
+
+            { category: "Clima y Cultura", text: "Se realizan encuestas de clima laboral de forma periódica y anónima." },
+            { category: "Clima y Cultura", text: "Existe un plan de bienestar y beneficios claro para los colaboradores." },
+            { category: "Clima y Cultura", text: "El liderazgo fomenta la comunicación abierta y el feedback constructivo." },
+            { category: "Clima y Cultura", text: "Se realizan actividades de integración y fortalecimiento de equipos." }
         ];
 
         let currentQuestion = 0;
@@ -2718,21 +2723,24 @@
             document.getElementById('step-results').classList.remove('hidden');
 
             const totalScore = answers.reduce((acc, curr) => acc + curr.value, 0);
+            const maxAvailablePoints = widgetQuestions.length * 2; // Cada pregunta vale máximo 2 pts
             document.getElementById('res-organismo').innerText = organismData.name;
             document.getElementById('res-score').innerText = totalScore;
+            document.getElementById('res-score').nextElementSibling.innerText = `de ${maxAvailablePoints} pts`;
 
-            // Animación círculo principal (radio=50, circumference=2*PI*50)
+            // Animación círculo principal
             const circle = document.getElementById('res-circle');
             const circumference = 314.16;
-            const offset = circumference - (totalScore / 34) * circumference;
+            const offset = circumference - (totalScore / maxAvailablePoints) * circumference;
             setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
 
-            // Determinar Nivel
-            let level = { tag: 'Inicial', name: 'Manual y Fragmentado', desc: 'Sistemas aislados y dependientes de procesos físicos. Riesgo alto de falta de integridad.' };
-            if (totalScore >= 9) level = { tag: 'En Desarrollo', name: 'Digitalización Parcial', desc: 'Existen herramientas digitales pero no están conectadas. Datos en silos.' };
-            if (totalScore >= 17) level = { tag: 'Integrado', name: 'Gestión Conectada', desc: 'Sistemas interoperables y trazabilidad básica garantizada.' };
-            if (totalScore >= 25) level = { tag: 'Optimizado', name: 'Ecosistema de Datos', desc: 'Toma de decisiones basada en métricas en tiempo real.' };
-            if (totalScore >= 31) level = { tag: 'Referente', name: 'Arquitectura Madura', desc: 'Máxima eficiencia operativa y estándares de transparencia global.' };
+            // Determinar Nivel (Actualizado a 42 puntos max aprox)
+            const ratio = totalScore / maxAvailablePoints;
+            let level = { tag: 'Inicial', name: 'Manual y Fragmentado', desc: 'Sistemas aislados y procesos físicos. Riesgo alto de falta de integridad.' };
+            if (ratio >= 0.25) level = { tag: 'En Desarrollo', name: 'Digitalización Parcial', desc: 'Existen herramientas digitales pero no están conectadas. Datos en silos.' };
+            if (ratio >= 0.50) level = { tag: 'Integrado', name: 'Gestión Conectada', desc: 'Sistemas interoperables y trazabilidad básica garantizada.' };
+            if (ratio >= 0.75) level = { tag: 'Optimizado', name: 'Cultura de Datos', desc: 'Toma de decisiones basada en métricas y cultura sólida.' };
+            if (ratio >= 0.90) level = { tag: 'Referente', name: 'Excelencia Integral', desc: 'Sostenibilidad, eficiencia y clima organizacional de vanguardia.' };
 
             document.getElementById('res-level-tag').innerText = `Nivel: ${level.tag}`;
             document.getElementById('res-level-name').innerText = level.name;
@@ -2744,13 +2752,14 @@
                 dimScores[a.category] = (dimScores[a.category] || 0) + a.value;
             });
 
-            // Colores de la marca por dimensión
+            // Colores de la marca por dimensión (CORREGIDO EL NEGRO)
             const dimColors = {
                 'Canales y Atención': '#8A2B88',
                 'Datos y Trazabilidad': '#E6217E',
                 'Procesos y Flujos': '#F99D1C',
                 'Cultura y Capacidades': '#F4D03F',
-                'Gobierno y Continuidad': '#110711'
+                'Gobernanza y Sostenibilidad': '#94A3B8', // Color slate para visibilidad
+                'Clima y Cultura': '#38BDF8' // Azul cielo para la nueva dimensión
             };
 
             const dimShortNames = {
@@ -2758,7 +2767,8 @@
                 'Datos y Trazabilidad': 'Datos',
                 'Procesos y Flujos': 'Procesos',
                 'Cultura y Capacidades': 'Cultura',
-                'Gobierno y Continuidad': 'Gobierno'
+                'Gobernanza y Sostenibilidad': 'Gobierno',
+                'Clima y Cultura': 'Clima'
             };
 
             // Generar Donuts SVG por dimensión
@@ -2861,9 +2871,12 @@
             const yellow = [244, 208, 63];
             const dark = [17, 7, 17];
             const gray = [120, 120, 130];
+            const slate = [148, 163, 184];
+            const sky = [56, 189, 248];
             const lightBg = [250, 250, 250];
 
             const totalScore = parseInt(document.getElementById('res-score').innerText);
+            const maxPoints = widgetQuestions.length * 2;
             const levelTag = document.getElementById('res-level-tag').innerText;
             const levelName = document.getElementById('res-level-name').innerText;
             const levelDesc = document.getElementById('res-level-desc').innerText;
@@ -2876,7 +2889,8 @@
                 'Datos y Trazabilidad': magenta,
                 'Procesos y Flujos': orange,
                 'Cultura y Capacidades': yellow,
-                'Gobierno y Continuidad': dark
+                'Gobernanza y Sostenibilidad': slate,
+                'Clima y Cultura': sky
             };
 
             // === HEADER GRADIENT BAR ===
@@ -2939,7 +2953,7 @@
             doc.setDrawColor(50, 50, 50);
             doc.setLineWidth(3);
             doc.circle(cx, cy, cr, 'S');
-            const pctTotal = totalScore / 34;
+            const pctTotal = totalScore / maxPoints;
             doc.setDrawColor(...magenta);
             doc.setLineWidth(3);
             // Dibujar arco como múltiples segmentos
@@ -2960,7 +2974,7 @@
             doc.text(`${totalScore}`, cx, cy + 2, { align: 'center' });
             doc.setFontSize(6);
             doc.setTextColor(150, 150, 150);
-            doc.text('de 34 pts', cx, cy + 7, { align: 'center' });
+            doc.text(`de ${maxPoints} pts`, cx, cy + 7, { align: 'center' });
 
             // Nivel
             doc.setTextColor(...magenta);
